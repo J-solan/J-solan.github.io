@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nombre del Proyecto - Portfolio Data Science</title>
+    <!-- Estilos principales -->
+    <link rel="stylesheet" href="../../css/styles.css">
+    <!-- Estilos específicos para proyectos -->
+    <link rel="stylesheet" href="../../css/project-styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <span class="bracket">&lt;</span>
+                <span class="logo-text">DataSci</span>
+                <span class="bracket">/&gt;</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../../index.html" class="nav-link">← Volver al Portfolio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="project-hero">
+        <div class="project-header">
+            <a href="../../index.html#proyectos" class="back-link">
+                ← Volver a Proyectos
+            </a>
+
+            <h1 class="project-title">Predicción de Series Temporales con LSTM</h1>
+            
+            <div class="project-meta">
+                <div class="meta-item">
+                    <span class="meta-icon">📅</span>
+                    <span>Octubre 2024</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">⏱️</span>
+                    <span>Duración: 3 meses</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">👤</span>
+                    <span>Proyecto Personal</span>
+                </div>
+            </div>
+
+            <div class="project-links">
+                <a href="#" class="btn btn-primary">
+                    <span>📂</span> Ver en GitHub
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>📊</span> Demo Interactiva
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>📄</span> Paper/Informe
+                </a>
+            </div>
+
+            <div class="tech-list">
+                <span class="tech-item">Python 3.10</span>
+                <span class="tech-item">TensorFlow</span>
+                <span class="tech-item">Keras</span>
+                <span class="tech-item">Pandas</span>
+                <span class="tech-item">NumPy</span>
+                <span class="tech-item">Matplotlib</span>
+                <span class="tech-item">Scikit-learn</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="project-content">
+        <!-- Resumen -->
+        <section class="content-section">
+            <h2>📝 Resumen Ejecutivo</h2>
+            <p>
+                Este proyecto desarrolla un modelo de Deep Learning basado en redes LSTM (Long Short-Term Memory) 
+                para la predicción de demanda energética utilizando datos históricos de consumo y variables 
+                meteorológicas. El modelo alcanza una precisión del 94.2% en el conjunto de prueba.
+            </p>
+            <p>
+                La solución implementada permite a las empresas del sector energético anticipar picos de demanda 
+                con hasta 24 horas de antelación, optimizando la distribución de recursos y reduciendo costos 
+                operacionales en un 15%.
+            </p>
+        </section>
+
+        <!-- Resultados Clave -->
+        <section class="content-section">
+            <h2>🎯 Resultados Clave</h2>
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-value">94.2%</div>
+                    <div class="result-label">Accuracy</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value">0.08</div>
+                    <div class="result-label">RMSE</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value">0.92</div>
+                    <div class="result-label">R² Score</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value">24h</div>
+                    <div class="result-label">Horizonte</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contexto y Motivación -->
+        <section class="content-section">
+            <h2>🔍 Contexto y Motivación</h2>
+            <p>
+                La predicción precisa de la demanda energética es crucial para:
+            </p>
+            <ul style="color: var(--text-secondary); line-height: 2; margin-left: 2rem;">
+                <li>Optimizar la generación y distribución de energía</li>
+                <li>Reducir costos operacionales</li>
+                <li>Mejorar la estabilidad de la red eléctrica</li>
+                <li>Integrar fuentes de energía renovable</li>
+                <li>Planificar mantenimiento y expansión de infraestructura</li>
+            </ul>
+
+            <div class="info-box">
+                <h4>💡 Insight Principal</h4>
+                <p>Los modelos LSTM superan a los métodos tradicionales (ARIMA, Prophet) en un 23% al capturar dependencias temporales complejas y patrones no lineales en los datos de consumo energético.</p>
+            </div>
+        </section>
+
+        <!-- Metodología -->
+        <section class="content-section">
+            <h2>🔬 Metodología</h2>
+            
+            <h3>1. Recolección y Preparación de Datos</h3>
+            <p>
+                Dataset: 3 años de datos horarios de consumo energético (26,280 registros) obtenidos de 
+                [fuente de datos]. Variables adicionales incluyen temperatura, humedad, día de la semana, 
+                festivos y eventos especiales.
+            </p>
+
+            <div class="code-block">
+                <code>
+# Carga y exploración inicial de datos
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('energy_consumption.csv', parse_dates=['timestamp'])
+print(f"Shape: {df.shape}")
+print(f"Missing values: {df.isnull().sum()}")
+
+# Feature engineering
+df['hour'] = df['timestamp'].dt.hour
+df['day_of_week'] = df['timestamp'].dt.dayofweek
+df['month'] = df['timestamp'].dt.month
+df['is_weekend'] = df['day_of_week'].isin([5, 6]).astype(int)
+                </code>
+            </div>
+
+            <h3>2. Análisis Exploratorio (EDA)</h3>
+            <p>
+                Análisis de tendencias, estacionalidad y correlaciones entre variables. Identificación 
+                de patrones cíclicos diarios y semanales.
+            </p>
+
+            <div class="image-gallery">
+                <div class="gallery-item">
+                    <img src="../../assets/images/proyectos/consumo-temporal.png" alt="Serie temporal" onerror="this.style.display='none'">
+                    <div class="gallery-caption">Evolución temporal del consumo energético</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="../../assets/images/proyectos/correlacion.png" alt="Matriz de correlación" onerror="this.style.display='none'">
+                    <div class="gallery-caption">Matriz de correlación entre variables</div>
+                </div>
+            </div>
+
+            <h3>3. Arquitectura del Modelo LSTM</h3>
+            <p>
+                Red neuronal recurrente con 3 capas LSTM, dropout para prevenir overfitting, 
+                y capa densa final para la predicción.
+            </p>
+
+            <div class="code-block">
+                <code>
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense, Dropout
+
+# Arquitectura del modelo
+model = Sequential([
+    LSTM(128, return_sequences=True, input_shape=(lookback, n_features)),
+    Dropout(0.2),
+    LSTM(64, return_sequences=True),
+    Dropout(0.2),
+    LSTM(32),
+    Dropout(0.2),
+    Dense(16, activation='relu'),
+    Dense(1)
+])
+
+model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+
+# Entrenamiento
+history = model.fit(
+    X_train, y_train,
+    validation_data=(X_val, y_val),
+    epochs=100,
+    batch_size=32,
+    callbacks=[early_stopping, reduce_lr]
+)
+                </code>
+            </div>
+
+            <h3>4. Proceso de Entrenamiento</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Semana 1-2</div>
+                    <h4>Preprocesamiento y Feature Engineering</h4>
+                    <p>Limpieza de datos, normalización, creación de features temporales</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Semana 3-4</div>
+                    <h4>Diseño de Arquitectura</h4>
+                    <p>Experimentación con diferentes configuraciones de capas LSTM</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Semana 5-8</div>
+                    <h4>Entrenamiento y Optimización</h4>
+                    <p>Ajuste de hiperparámetros usando Grid Search y Bayesian Optimization</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Semana 9-12</div>
+                    <h4>Evaluación y Deployment</h4>
+                    <p>Validación final, documentación y despliegue del modelo</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resultados Detallados -->
+        <section class="content-section">
+            <h2>📊 Resultados Detallados</h2>
+            
+            <h3>Métricas de Performance</h3>
+            <div class="code-block">
+                <code>
+=== Resultados en Test Set ===
+RMSE (Root Mean Squared Error): 0.0812
+MAE (Mean Absolute Error): 0.0621
+R² Score: 0.9234
+MAPE (Mean Absolute Percentage Error): 4.3%
+
+=== Comparación con Baselines ===
+LSTM (este modelo):     94.2% accuracy
+Random Forest:          87.5% accuracy
+ARIMA:                  79.3% accuracy
+Prophet:                81.7% accuracy
+Naive Forecast:         62.1% accuracy
+                </code>
+            </div>
+
+            <h3>Análisis de Errores</h3>
+            <p>
+                El modelo presenta mayor error en días festivos y eventos extraordinarios. 
+                Implementación de features adicionales mejoró la predicción en estos casos en un 12%.
+            </p>
+
+            <div class="info-box warning">
+                <h4>⚠️ Limitaciones Identificadas</h4>
+                <p>
+                    El modelo puede tener dificultades con eventos completamente inusuales o cambios 
+                    abruptos en los patrones de consumo (ej: pandemias, crisis energéticas). 
+                    Se recomienda reentrenamiento periódico.
+                </p>
+            </div>
+        </section>
+
+        <!-- Tecnologías y Herramientas -->
+        <section class="content-section">
+            <h2>🛠️ Stack Tecnológico</h2>
+            
+            <h3>Desarrollo y Modelado</h3>
+            <ul style="color: var(--text-secondary); line-height: 2; margin-left: 2rem;">
+                <li><strong>Python 3.10</strong> - Lenguaje principal</li>
+                <li><strong>TensorFlow/Keras</strong> - Framework de Deep Learning</li>
+                <li><strong>Pandas & NumPy</strong> - Manipulación de datos</li>
+                <li><strong>Scikit-learn</strong> - Preprocesamiento y métricas</li>
+            </ul>
+
+            <h3>Visualización y Análisis</h3>
+            <ul style="color: var(--text-secondary); line-height: 2; margin-left: 2rem;">
+                <li><strong>Matplotlib & Seaborn</strong> - Gráficos estáticos</li>
+                <li><strong>Plotly</strong> - Visualizaciones interactivas</li>
+                <li><strong>TensorBoard</strong> - Monitoreo del entrenamiento</li>
+            </ul>
+
+            <h3>Infraestructura</h3>
+            <ul style="color: var(--text-secondary); line-height: 2; margin-left: 2rem;">
+                <li><strong>Jupyter Notebooks</strong> - Experimentación</li>
+                <li><strong>Docker</strong> - Contenedorización</li>
+                <li><strong>Git & GitHub</strong> - Control de versiones</li>
+                <li><strong>AWS EC2</strong> - Entrenamiento en la nube</li>
+            </ul>
+        </section>
+
+        <!-- Aprendizajes -->
+        <section class="content-section">
+            <h2>💡 Aprendizajes Clave</h2>
+            
+            <h3>Técnicos</h3>
+            <ul style="color: var(--text-secondary); line-height: 2; margin-left: 2rem;">
+                <li>Las redes LSTM requieren un cuidadoso ajuste de la ventana temporal (lookback)</li>
+                <li>La normalización de datos es crítica para la convergencia del modelo</li>
+                <li>El dropout entre capas LSTM previene efectivamente el overfitting</li>
+                <li>La creación de features temporales mejora significativamente la predicción</li>
+            </ul>
+
+            <h3>De Negocio</h3>
+            <ul style="color: var(--text-secondary); line-height: 2; margin-left: 2rem;">
+                <li>Un error del 5% en predicción puede significar millones en costos operativos</li>
+                <li>Los stakeholders valoran más la interpretabilidad que la precisión extrema</li>
+                <li>La actualización continua del modelo es esencial en entornos cambiantes</li>
+            </ul>
+        </section>
+
+        <!-- Trabajo Futuro -->
+        <section class="content-section">
+            <h2>🚀 Próximos Pasos</h2>
+            
+            <div class="info-box">
+                <h4>Mejoras Planificadas</h4>
+                <ul style="color: var(--text-secondary); margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Implementar atención (Attention Mechanism) para mejorar interpretabilidad</li>
+                    <li>Integrar datos de redes sociales para detectar eventos inesperados</li>
+                    <li>Desarrollar API REST para consumo en tiempo real</li>
+                    <li>Crear dashboard interactivo con Streamlit o Dash</li>
+                    <li>Extender predicción a 7 días con modelos ensemble</li>
+                    <li>Implementar explicabilidad con SHAP values</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Referencias y Links -->
+        <section class="content-section">
+            <h2>🔗 Referencias y Recursos</h2>
+            
+            <div class="project-links">
+                <a href="#" class="btn btn-primary">
+                    <span>📂</span> Repositorio GitHub
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>📓</span> Jupyter Notebook
+                </a>
+                <a href="#" class="btn btn-secondary">
+                    <span>📄</span> Informe Completo (PDF)
+                </a>
+            </div>
+
+            <h3 style="margin-top: 2rem;">Papers Relevantes</h3>
+            <ul style="color: var(--text-secondary); line-height: 2; margin-left: 2rem;">
+                <li>Hochreiter & Schmidhuber (1997) - Long Short-Term Memory</li>
+                <li>Cho et al. (2014) - Learning Phrase Representations using RNN</li>
+                <li>Bouktif et al. (2018) - Optimal Deep Learning LSTM Model for Electric Load Forecasting</li>
+            </ul>
+
+            <h3>Datasets Utilizados</h3>
+            <ul style="color: var(--text-secondary); line-height: 2; margin-left: 2rem;">
+                <li>UCI Machine Learning Repository - Individual Household Electric Power Consumption</li>
+                <li>Open Power System Data - Time series</li>
+                <li>NOAA Weather Data - Datos meteorológicos</li>
+            </ul>
+        </section>
+
+        <!-- Proyectos Relacionados -->
+        <section class="content-section">
+            <h2>🔗 Proyectos Relacionados</h2>
+            <div class="related-projects">
+                <div class="project-card">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                    </div>
+                    <h3>Análisis de Datos COVID-19</h3>
+                    <p class="project-description">EDA y modelado predictivo de propagación de COVID-19</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">Plotly</span>
+                    </div>
+                    <a href="#" class="card-link">Ver proyecto →</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="card-header">
+                        <div class="card-icon">🤖</div>
+                    </div>
+                    <h3>Sistema de Recomendación NLP</h3>
+                    <p class="project-description">Recomendador basado en análisis semántico con BERT</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">BERT</span>
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">Docker</span>
+                    </div>
+                    <a href="#" class="card-link">Ver proyecto →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="content-section" style="text-align: center; padding: 3rem 0;">
+            <h2 style="border: none; padding: 0;">¿Interesado en este proyecto?</h2>
+            <p style="font-size: 1.1rem; margin: 1.5rem 0;">
+                Si quieres discutir sobre este proyecto, colaborar, o tienes preguntas,<br>
+                no dudes en contactarme.
+            </p>
+            <div class="project-links" style="justify-content: center;">
+                <a href="../../index.html#contacto" class="btn btn-primary">
+                    <span>✉</span> Contactar
+                </a>
+                <a href="../../index.html#proyectos" class="btn btn-secondary">
+                    <span>←</span> Ver más proyectos
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">Conecta conmigo</h3>
+                <p class="footer-text">Siempre abierto a nuevos proyectos y colaboraciones en Data Science</p>
+            </div>
+            
+            <div class="footer-links">
+                <a href="https://github.com/tu-usuario" target="_blank" class="footer-link">
+                    <span class="link-icon">→</span> GitHub
+                </a>
+                <a href="https://linkedin.com/in/tu-perfil" target="_blank" class="footer-link">
+                    <span class="link-icon">→</span> LinkedIn
+                </a>
+                <a href="mailto:tu-email@ejemplo.com" class="footer-link">
+                    <span class="link-icon">→</span> Email
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p class="copyright">
+                <span class="code-line">// Desarrollado con 💚 y ☕</span>
+                <br>
+                © 2025 | Data Science Portfolio
+            </p>
+        </div>
+    </footer>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

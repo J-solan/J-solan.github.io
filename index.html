@@ -4,25 +4,378 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Jorge Solán</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <!-- Efecto de partículas de fondo -->
+    <canvas id="matrix-bg"></canvas>
+
     <header>
-        <h1>Hola, soy Jorge Solán</h1>
-        <p>Estudiante de Máster en Data Science en la UOC y Administrador de sistemas.</p>
+        <nav class="navbar">
+            <div class="logo">
+                <span class="bracket">&lt;</span>
+                <span class="logo-text">Jorge Solán</span>
+                <span class="bracket">/&gt;</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#inicio" class="nav-link">inicio()</a></li>
+                <li><a href="#proyectos" class="nav-link">proyectos[]</a></li>
+                <li><a href="#skills" class="nav-link">skills()</a></li>
+                <li><a href="#contacto" class="nav-link">contacto()</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle">
+                <span class="icon">◐</span>
+            </button>
+        </nav>
     </header>
 
-    <main>
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span class="terminal-btn red"></span>
+                    <span class="terminal-btn yellow"></span>
+                    <span class="terminal-btn green"></span>
+                </div>
+                <div class="terminal-body">
+                    <p class="terminal-line"><span class="prompt">$</span> whoami</p>
+                    <p class="terminal-output typing-effect">Data Scientist & System Administrator</p>
+                    <p class="terminal-line"><span class="prompt">$</span> cat education.txt</p>
+                    <p class="terminal-output typing-effect delay-1">Ingeniería Informática - Unizar</p>
+                    <p class="terminal-output typing-effect delay-1">Máster en Data Science - UOC</p>
+                    <p class="terminal-line"><span class="prompt">$</span> ls skills/</p>
+                    <p class="terminal-output typing-effect delay-2">Python  |  C++   |  Haskell   |  SQL  |  Linux</p>
+                    <p class="terminal-cursor">█</p>
+                </div>
+            </div>
+            
+            <div class="hero-buttons">
+                <a href="#proyectos" class="btn btn-primary">
+                    <span class="btn-icon">▶</span> Explorar Proyectos
+                </a>
+                <a href="#contacto" class="btn btn-secondary">
+                    <span class="btn-icon">✉</span> Contactar
+                </a>
+            </div>
+        </div>
 
-        <section>
-            <ul>
-                <li><a href="uoc/">📘 Máster UOC — Proyectos y apuntes</a></li>
-            </ul>
-        </section>
-    </main>
+        <div class="hero-visual">
+            <div class="data-viz">
+                <div class="neural-network" id="neuralNet"></div>
+            </div>
+        </div>
+    </section>
 
-    <footer>
-        <p>© 2025 Solán — Máster en Data Science (UOC)</p>
+    <section class="stats-bar">
+        <div class="stat-item">
+            <span class="stat-number" data-target="1">0</span>
+            <span class="stat-label">Proyectos</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="5">0</span>
+            <span class="stat-label">Tecnologías</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="100">0</span>
+            <span class="stat-label">% Dedicación</span>
+        </div>
+    </section>
+
+    <section class="container" id="proyectos">
+        <h2 class="section-title">
+            <span class="title-bracket">[</span>
+            Proyectos
+            <span class="title-bracket">]</span>
+        </h2>
+        
+        <div class="filter-tabs">
+            <button class="filter-btn active" data-filter="all">
+                <span class="filter-icon">●</span> Todos
+            </button>
+            <button class="filter-btn" data-filter="personal">
+                <span class="filter-icon">●</span> Personales
+            </button>
+            <button class="filter-btn" data-filter="master">
+                <span class="filter-icon">●</span> Máster UOC
+            </button>
+            <button class="filter-btn" data-filter="unizar">
+                <span class="filter-icon">●</span> Unizar
+            </button>
+        </div>
+
+        <div class="projects-grid">
+            <!-- Proyecto 1
+            <div class="project-card" data-category="personal ml">
+                <div class="card-header">
+                    <div class="card-icon">🤖</div>
+                    <div class="card-status">
+                        <span class="status-dot active"></span> Activo
+                    </div>
+                </div>
+                <h3>Predicción de Series Temporales</h3>
+                <p class="project-description">Modelo LSTM para predicción de demanda energética utilizando datos históricos y variables meteorológicas.</p>
+                <div class="project-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Accuracy</span>
+                        <span class="metric-value">94.2%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">RMSE</span>
+                        <span class="metric-value">0.08</span>
+                    </div>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">TensorFlow</span>
+                    <span class="tech-tag">LSTM</span>
+                    <span class="tech-tag">Pandas</span>
+                </div>
+                <div class="card-footer">
+                    <a href="uoc/index.html" class="card-link">Ver detalles →</a>
+                    <a href="#" class="card-link github">GitHub</a>
+                </div>
+            </div>
+
+            Proyecto 2
+            <div class="project-card" data-category="master ml">
+                <div class="card-header">
+                    <div class="card-icon">📊</div>
+                    <div class="card-status">
+                        <span class="status-dot"></span> Completado
+                    </div>
+                </div>
+                <h3>Análisis Exploratorio de Datos</h3>
+                <p class="project-description">EDA completo de dataset COVID-19, con visualizaciones interactivas y análisis estadístico avanzado.</p>
+                <div class="project-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Dataset</span>
+                        <span class="metric-value">500K</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Variables</span>
+                        <span class="metric-value">45</span>
+                    </div>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Seaborn</span>
+                    <span class="tech-tag">Plotly</span>
+                    <span class="tech-tag">Scipy</span>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="card-link">Ver detalles →</a>
+                    <a href="#" class="card-link github">GitHub</a>
+                </div>
+            </div>
+
+            Proyecto 3
+            <div class="project-card" data-category="personal">
+                <div class="card-header">
+                    <div class="card-icon">🔍</div>
+                    <div class="card-status">
+                        <span class="status-dot active"></span> En desarrollo
+                    </div>
+                </div>
+                <h3>Sistema de Recomendación NLP</h3>
+                <p class="project-description">Recomendador de contenido basado en análisis semántico con transformers y embeddings.</p>
+                <div class="project-metrics">
+                    <div class="metric">
+                        <span class="metric-label">Precision</span>
+                        <span class="metric-value">87%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Users</span>
+                        <span class="metric-value">2.3K</span>
+                    </div>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-tag">BERT</span>
+                    <span class="tech-tag">FastAPI</span>
+                    <span class="tech-tag">Docker</span>
+                    <span class="tech-tag">MongoDB</span>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="card-link">Ver detalles →</a>
+                    <a href="#" class="card-link github">GitHub</a>
+                </div>
+            </div> -->
+
+            <!-- Proyecto 4 -->
+            <div class="project-card" data-category="unizar">
+                <div class="card-header">
+                    <div class="card-icon">🎓</div>
+                    <div class="card-status">
+                        <span class="status-dot active"></span> Finalizado
+                    </div>
+                </div>
+                <h3>TFG - Simulación de hardware de captura ultrarrápida de fotones en transporte de luz.</h3>
+                <p class="project-description">Simulación de un SPAD(Single-photon avalanche diode) con el software de Mitsuba 3 para capturas LOS y NLOS.</p>
+                <div class="project-metrics">
+                    <div class="metric">
+                        <span class="metric-label">mAP</span>
+                        <span class="metric-value">91.5%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">FPS</span>
+                        <span class="metric-value">45</span>
+                    </div>
+                </div>
+                <div class="tech-stack">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Mitsuba 3</span>
+                    <span class="tech-tag">DR. Jit</span>
+                </div>
+                <div class="card-footer">
+                    <a href="projects/unizar/tfg.html" class="card-link">Ver detalles →</a>
+                    <a href="https://github.com/J-solan/mitransient_SPAD" class="card-link github">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" id="skills">
+        <h2 class="section-title">
+            <span class="title-bracket">{</span>
+            Stack Tecnológico
+            <span class="title-bracket">}</span>
+        </h2>
+
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <span class="icon">🐍</span> Languages & Core
+                </h3>
+                <div class="skill-bars">
+                    <div class="skill-item">
+                        <span class="skill-name">Python</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">R</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 75%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">SQL</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="skill-category">
+                <h3 class="category-title">
+                    <span class="icon">🤖</span> ML & AI
+                </h3>
+                <div class="skill-bars">
+                    <div class="skill-item">
+                        <span class="skill-name">TensorFlow / Keras</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">PyTorch</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Scikit-learn</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 92%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <span class="icon">📊</span> Data & Viz
+                </h3>
+                <div class="skill-bars">
+                    <div class="skill-item">
+                        <span class="skill-name">Pandas / NumPy</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Plotly / Matplotlib</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 77%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Power BI / Tableau</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 72%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <span class="icon">🖥️</span> Linux & Infraestructuras
+                </h3>
+                <div class="skill-bars">
+                    <div class="skill-item">
+                        <span class="skill-name">Administración de servidores Linux</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Automatización en Bash / Shell</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 93%"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Monitorización con Icinga / Grafana</span>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="--progress: 82%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">Conecta conmigo</h3>
+            </div>
+            
+            <div class="footer-links">
+                <a href="https://github.com/J-solan" target="_blank" class="footer-link">
+                    <span class="link-icon">→</span> GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/jorge-solan/" target="_blank" class="footer-link">
+                    <span class="link-icon">→</span> LinkedIn
+                </a>
+                <a href="mailto:jorgesolanmorote@gmail.com" class="footer-link">
+                    <span class="link-icon">→</span> Email
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p class="copyright">
+                <br>
+                © 2025 | Jorge Solán Portfolio
+            </p>
+        </div>
     </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/particles.js"></script>
 </body>
 </html>

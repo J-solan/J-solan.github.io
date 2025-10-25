@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFG Ingeniería Informática</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/project-styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <span class="bracket">&lt;</span>
+                <span class="logo-text">TFG</span>
+                <span class="bracket">/&gt;</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../../index.html" class="nav-link">← Volver al Portfolio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="project-hero">
+        <div class="project-header">
+            <a href="../../index.html#proyectos" class="back-link">← Volver a Proyectos</a>
+
+            <h1 class="project-title">Simulación de hardware de captura ultrarrápida de fotones en transporte de luz</h1>
+            
+            <div class="project-meta">
+                <div class="meta-item">📅 Agosto 2024</div>
+                <div class="meta-item">⏱️ Duración: 10 meses</div>
+                <div class="meta-item">👤 Trabajo de Final de Grado</div>
+            </div>
+
+            <div class="project-links">
+                <a href="https://github.com/J-solan/mitransient_SPAD" class="btn btn-primary">
+                    <span>📂</span> Ver en GitHub
+                </a>
+                <a href="https://zaguan.unizar.es/record/149395/files/TAZ-TFG-2024-4202.pdf" class="btn btn-secondary">
+                    <span>📄</span> Informe completo (PDF)
+                </a>
+            </div>
+
+            <div class="tech-list">
+                <span class="tech-item">Python 3.11</span>
+                <span class="tech-item">Mitsuba 3</span>
+                <span class="tech-item">DR.Jit</span>
+                <span class="tech-item">NumPy</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="project-content">
+        <!-- Resumen -->
+        <section class="content-section">
+            <h2>📝 Resumen Ejecutivo</h2>
+            <p>
+                Este trabajo presenta una simulación del comportamiento de sensores SPAD (Single-Photon Avalanche Diodes)
+                utilizados en sistemas de captura ultrarrápida de luz. A través del motor físico <strong>Mitsuba 3</strong>,
+                se modela la detección temporal de fotones, permitiendo recrear cómo la luz se propaga y refleja en
+                entornos complejos con resolución de picosegundos.
+            </p>
+            <p>
+                El proyecto contribuye al estudio de la <strong>imagen no lineal de visión directa (NLOS)</strong> y de técnicas
+                de reconstrucción 3D basadas en el tiempo de vuelo (ToF), aportando una herramienta de simulación
+                flexible y reproducible para la comunidad científica.
+            </p>
+        </section>
+
+        <!-- GIFs -->
+        <section class="content-section">
+            <img src="/assets/images/tfm/cornell-box.gif" alt="Simulación Cornell Box con detección LOS">
+            <img src="/assets/images/tfm/nlos-Z.gif" alt="Simulación NLOS con geometría Z">
+        </section>
+
+        <!-- Contexto y Motivación -->
+        <section class="content-section">
+            <h2>🔍 Contexto y Motivación</h2>
+            <p>
+                La captura ultrarrápida de luz ha abierto nuevas posibilidades en <strong>visión computacional</strong>,
+                permitiendo observar la propagación de fotones a través de medios opacos o fuera de línea de visión.
+                Los sensores SPAD son capaces de registrar eventos individuales de fotones con altísima precisión temporal,
+                pero su estudio experimental es costoso y limitado.
+            </p>
+            <p>
+                Este trabajo busca <strong>replicar mediante simulación</strong> el funcionamiento físico de estos sensores,
+                validando su respuesta frente a configuraciones geométricas diversas y materiales con distintas propiedades ópticas.
+            </p>
+        </section>
+
+        <!-- Metodología -->
+        <!-- Metodología -->
+        <section class="content-section">
+            <h2>🔬 Metodología</h2>
+            <p>
+                El desarrollo del trabajo se centró en la creación de un entorno de simulación que reprodujera el comportamiento físico de los sensores
+                <strong>Single-Photon Avalanche Diode (SPAD)</strong> utilizados en captura ultrarrápida de luz. La metodología combinó el uso de 
+                <strong>Mitsuba 3</strong> —un motor de renderizado físicamente basado— con la extensión de su arquitectura mediante el lenguaje 
+                <strong>DR.Jit</strong>, permitiendo modelar tanto la óptica de transporte de luz como el proceso estadístico de detección de fotones individuales.
+            </p>
+
+            <h3>1️⃣ Análisis del sistema físico y modelado matemático</h3>
+            <p>
+                Se comenzó con un estudio detallado del funcionamiento de los sensores SPAD: su mecanismo de avalancha, el tiempo muerto tras cada detección,
+                las limitaciones debidas al <em>dark-count rate</em> y el comportamiento estadístico asociado al proceso de conteo de fotones.
+                Con base en la literatura existente sobre <strong>time-resolved imaging</strong> y <strong>femto-photography</strong>,
+                se formuló un modelo de detección probabilístico capaz de reproducir la respuesta temporal del sensor a estímulos de luz ultrarrápidos.
+            </p>
+
+            <p>
+                Este modelo se representó mediante funciones de distribución temporal (<em>temporal point spread functions</em>), 
+                que describen cómo un pulso ideal de luz se dispersa en el tiempo debido a interacciones con materiales y geometrías.
+                Se incorporó también un modelo de ruido dependiente de la temperatura y del flujo de fotones incidente,
+                siguiendo las curvas típicas de respuesta de los dispositivos SPAD comerciales.
+            </p>
+
+            <h3>2️⃣ Implementación en Mitsuba 3 y DR.Jit</h3>
+            <p>
+                El núcleo del trabajo consistió en extender el motor de renderizado <strong>Mitsuba 3</strong> —escrito en C++ y Python— 
+                para incorporar un nuevo <em>integrador</em> denominado <code>transient_spad</code>. 
+                Este integrador simula el transporte de luz a nivel de fotón, midiendo los tiempos de llegada a un sensor virtual
+                y construyendo histogramas de detección temporal con resolución configurable (en el orden de los picosegundos).
+            </p>
+
+            <p>
+                Se utilizaron las capacidades de diferenciación automática de <strong>DR.Jit</strong> para optimizar cálculos de trayectorias de rayos
+                y gestionar grandes volúmenes de muestras Monte Carlo. El código se integró dentro del ecosistema de Mitsuba 3,
+                respetando su estructura modular y aprovechando sus representaciones espectrales de materiales y emisores de luz.
+            </p>
+
+            <h3>3️⃣ Escenarios experimentales: LOS y NLOS</h3>
+            <p>
+                Para evaluar el comportamiento del simulador, se diseñaron dos tipos de escenas:
+                <strong>Line of Sight (LOS)</strong>, donde la cámara observa directamente el objeto iluminado,
+                y <strong>Non-Line of Sight (NLOS)</strong>, donde la luz se refleja en una superficie intermedia
+                antes de alcanzar el objeto oculto. 
+                Las escenas se modelaron con geometrías simples (como una “Cornell Box”) y materiales difusos e ideales
+                para aislar efectos de reflexión y dispersión.
+            </p>
+
+            <p>
+                En cada simulación se generaron millones de trayectorias de fotones, recopilando histogramas temporales
+                que luego se analizaron para obtener información de profundidad y reconstrucción geométrica básica.
+                Se compararon los resultados con simulaciones de referencia y estudios previos de Jarabo, Velten y colaboradores.
+            </p>
+
+            <h3>4️⃣ Validación y análisis de resultados</h3>
+            <p>
+                Los resultados mostraron una buena correspondencia entre los histogramas simulados y los obtenidos experimentalmente
+                en la literatura. En configuraciones LOS, la curva de detección presenta un pico bien definido
+                correspondiente al tiempo directo de vuelo. En NLOS, la respuesta se atenúa y se dispersa, 
+                reproduciendo con fidelidad la naturaleza difusa del transporte de luz indirecta.
+            </p>
+            <p>
+                Se realizó además un estudio de rendimiento y escalabilidad del integrador, demostrando que el uso de DR.Jit
+                permite mantener tiempos de simulación razonables incluso con resoluciones temporales muy altas.
+            </p>
+
+            <div class="info-box">
+                <h4>💡 Resultado Destacado</h4>
+                <p>
+                    La herramienta desarrollada reproduce el comportamiento temporal de la luz en entornos complejos,
+                    habilitando la experimentación virtual con sensores SPAD sin recurrir a hardware físico.
+                    Esto la convierte en una base sólida para futuros trabajos en reconstrucción NLOS, calibración de sensores
+                    y diseño de nuevos algoritmos de visión ultrarrápida.
+                </p>
+            </div>
+        </section>
+
+
+        <!-- Papers relacionados -->
+        <section class="content-section">
+            <h2>📚 Papers Relacionados</h2>
+            <ul style="color: var(--text-secondary); line-height: 2; margin-left: 2rem;">
+                <li>Velten, A. et al. <em>Femto-photography: capturing and visualizing the propagation of light.</em> ACM TOG, 2013.</li>
+                <li>Wu, R., Jarabo, A., Suo, J. et al. <em>Adaptive polarization-difference transient imaging for depth estimation in scattering media.</em> Opt. Lett., 2018.</li>
+                <li>Velten, A. et al. <em>Recovering 3D shape around a corner using ultrafast time-of-flight imaging.</em> Nature Communications, 2012.</li>
+            </ul>
+        </section>
+
+        <!-- CTA -->
+        <section class="content-section" style="text-align: center; padding: 3rem 0;">
+            <h2 style="border: none;">¿Interesado en este proyecto?</h2>
+            <p>Si quieres discutir sobre el trabajo, colaborar o compartir ideas, no dudes en contactarme.</p>
+            <div class="project-links" style="justify-content: center;">
+                <a href="../../index.html#proyectos" class="btn btn-secondary">← Ver más proyectos</a>
+            </div>
+        </section>
+    </div>
+
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">Conecta conmigo</h3>
+            </div>
+            
+            <div class="footer-links">
+                <a href="https://github.com/J-solan" target="_blank" class="footer-link">
+                    <span class="link-icon">→</span> GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/jorge-solan/" target="_blank" class="footer-link">
+                    <span class="link-icon">→</span> LinkedIn
+                </a>
+                <a href="mailto:jorgesolanmorote@gmail.com" class="footer-link">
+                    <span class="link-icon">→</span> Email
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p class="copyright">
+                <br>
+                © 2025 | Jorge Solán Portfolio
+            </p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
