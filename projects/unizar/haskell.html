@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Renderizado — Path Tracer & Photon Mapper</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+  <link rel="stylesheet" href="../../css/project-styles.css">
+  <meta name="description" content="Implementación en Haskell de un Path Tracer y un Photon Mapper. BVH, KDT, concurrencia y optimizaciones para generar imágenes fotorrealistas y cáusticas. Documentación larga y detallada." />
+</head>
+<body>
+  <header>
+        <nav class="navbar">
+            <div class="logo">
+                <span class="bracket">&lt;</span>
+                <span class="logo-text">Gráfica</span>
+                <span class="bracket">/&gt;</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../../index.html" class="nav-link">← Volver al Portfolio</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                <span class="icon">☀</span>
+            </button>
+        </nav>
+    </header>
+
+  <section class="project-hero">
+    <div class="project-header">
+      <a href="../../index.html#proyectos" class="back-link">← Volver a Proyectos</a>
+      <h1 class="project-title">Path Tracer &amp; Photon Mapper con Haskell</h1>
+
+      <div class="project-meta">
+        <div class="meta-item">📅 Diciembre 2023 — Mayo 2024</div>
+        <div class="meta-item">⏱️ Duración: ~6 meses (iterativo)</div>
+        <div class="meta-item">👥 Práctica de Informática Gráfica — Implementación en <strong>Haskell</strong></div>
+      </div>
+
+      <div class="project-links">
+        <a href="https://github.com/J-solan/grafica" class="btn btn-primary" target="_blank">📂 Ver en GitHub</a>
+        <a href="/J-solan.github.io/assets/pdfs/pathtracer.pdf" class="btn btn-secondary" target="_blank">📄 PathTracer (PDF)</a>
+        <a href="/J-solan.github.io/assets/pdfs/photonmapping.pdf" class="btn btn-secondary" target="_blank">📄 PhotonMapper (PDF)</a>
+      </div>
+
+      <div class="tech-list">
+        <span class="tech-item">Haskell</span>
+        <span class="tech-item">BVH / K-D Tree</span>
+        <span class="tech-item">Concurrente / Distribuido</span>
+        <span class="tech-item">Monte Carlo, MIS, NEE</span>
+        <span class="tech-item">PPM / BMP outputs, scripts de orquestación</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="project-content">
+
+    <section class="content-section">
+      <h2>📝 Resumen</h2>
+      <p>
+        Este trabajo presenta una implementación completa y detallada de dos técnicas clásicas de renderizado: <strong>Path Tracing</strong> y <strong>Photon Mapping</strong>, desarrolladas íntegramente en Haskell. Mientras que la mayoría de la asignatura y ejemplos habituales estaban en C/C++, fuimos el primer equipo en implementar la práctica completa en Haskell — aprovechar la pureza, tipado y expresividad del lenguaje nos permitió diseñar un código limpio y con menos errores de memoria, manteniendo un rendimiento competitivo mediante optimizaciones cuidadosas.
+      </p>
+      <p>
+        La página recoge: diseño algorítmico, decisiones de implementación, aspectos físicos y matemáticos relevantes (radiometría básica, ecuación de render, BRDFs), optimizaciones (BVH, K-D tree para fotones), paralelización local y distribución simple, detalles experimentales y un apartado reproducible para ejecutar y comparar escenas y benchmarks.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>🎯 Objetivos</h2>
+      <ul>
+        <li>Implementar un Path Tracer capaz de manejar materiales difusos, especulares y refractivos con muestreo Monte Carlo.</li>
+        <li>Implementar un Photon Mapper para capturar cáusticas y mejorar la estimación local de energía incidente.</li>
+        <li>Optimizar el rendimiento mediante estructuras de aceleración (BVH) y paralelización en Haskell.</li>
+        <li>Comparar resultados y documentar trade-offs: ruido vs sesgo, tiempo de render vs calidad.</li>
+        <li>Garantizar reproducibilidad: scripts de build, parámetros y escenas listadas.</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2>🔬 Fundamentos físicos y matemáticos básicos (lo que explicamos en los PDFs)</h2>
+
+      <h3>Radiometría simplificada</h3>
+      <p>
+        Para que el lector no pierda el hilo, incluimos una breve revisión de conceptos usados en el código:
+      </p>
+      <ul>
+        <li><strong>Radiancia (L):</strong> potencia por unidad de área proyectada por unidad de ángulo sólido. Es la magnitud que permanece invariante a lo largo de un rayo en medios no absorbentes y es la que integra la cámara para obtener píxeles.</li>
+        <li><strong>Flujo (Φ):</strong> energía total por unidad de tiempo emitida por una fuente.</li>
+        <li><strong>Irradiancia (E):</strong> potencia incidente por unidad de área. En photon mapping estimamos esta cantidad localmente mediante densidad de fotones.</li>
+      </ul>
+
+      <h3>Ecuación de render (Kajiya) — forma práctica</h3>
+      <p>
+        La ecuación integral de render describe la radiancia saliente como la suma de emisión propia y la integral sobre la esfera de direcciones de la radiancia entrante modulada por la BRDF y por el término cos(θ):
+      </p>
+      <pre><code> L_o(x, ω_o) = L_e(x, ω_o) + ∫_{Ω} f_r(x, ω_i, ω_o) L_i(x, ω_i) cosθ_i dω_i
+</code></pre>
+      <p>
+        En el Path Tracer aproximamos esta integral mediante muestreo Monte Carlo (caminos aleatorios). En Photon Mapping, la primera pasada (mapa de fotones) aproxima la contribución de la integral mediante acumulación y posterior estimación de densidad en k vecinos o radio fijo.
+      </p>
+
+      <h3>BRDFs y fenómenos ópticos</h3>
+      <p>
+        Se implementaron BRDFs básicos y extensiones:
+      </p>
+      <ul>
+        <li><strong>Lambertiano:</strong> difuso ideal, muestreo proporcional al coseno.</li>
+        <li><strong>Phong / Blinn-Phong:</strong> modelo empírico para especulares (implementado para comparación).</li>
+        <li><strong>Dielectric:</strong> reflexión y refracción con Fresnel (Schlick aprox.).</li>
+        <li><strong>Bump mapping:</strong> perturbación de normales para simular detalle sin aumentar la geometría.</li>
+      </ul>
+
+      <h3>Muéstrame uno de los PDFs (resumen):</h3>
+      <p>El PDF de <em>pathtracer</em> describe el muestreo de importancia, ruleta rusa, next-event-estimation, cámaras con apertura y generación de múltiples rayos por píxel (samples per pixel). El PDF de <em>photonmapping</em> documenta la fase de emisión de fotones, construcción del k-d tree y la estimación de densidad con distintos kernels, además de pruebas analíticas sobre el sesgo introducido por el radio fijo.</p>
+    </section>
+
+    <section class="content-section">
+      <h2>🛠️ Metodología y extras implementados (detallado)</h2>
+
+      <h3>Path Tracer — detalles extras</h3>
+      <ul>
+        <li><strong>Muestreo y MIS:</strong> combinamos técnicas de muestreo (sampling de BRDF y muestreo directo de luz) usando Multiple Importance Sampling para reducir varianza en escenas con luces intensas y pequeñas áreas emisoras.</li>
+        <li><strong>Next-Event-Estimation (NEE):</strong> para luz directa se realiza un muestreo explícito hacia las luces, con visibilidad test para evitar contribuciones ocultas y con pesos MIS.</li>
+        <li><strong>Russian Roulette:</strong> técnica para limitar la profundidad media de muestreo adaptando la probabilidad de supervivencia al albedo del material.</li>
+        <li><strong>Cámara física:</strong> implementación de apertura (depth of field) y exposición para simular ópticas reales.</li>
+        <li><strong>Soporte de texturas UV y mapas normales:</strong> texturizado de esferas, triángulos y rectángulos, con parsing simple de BMP para texturas.</li>
+      </ul>
+
+      <h3>Photon Mapping — detalles extras</h3>
+      <ul>
+        <li><strong>Emisión de fotones:</strong> energía por fotón proporcional a la potencia de la luz. Se guarda posición, dirección y energía del fotón en una lista antes de construir el k-d tree.</li>
+        <li><strong>K-D Tree y consultas:</strong> utilizamos la librería kdt de Haskell para construir una estructura estática optimizada y realizar búsquedas k-NN y radius queries con backend en vectores estrictos para rendimiento.</li>
+        <li><strong>Kernels de estimación:</strong> soporte para kernel constante (box), epanechnikov (cuadrático) y un kernel gaussiano aproximado. Se comparan en el PDF trade-offs entre ruido y suavidad.</li>
+        <li><strong>Filtrado espacial:</strong> para evitar contaminación entre objetos se filtran fotones por ID de objeto/normal para usar solo fotones que realmente pertenecen a la superficie local.</li>
+        <li><strong>Photon Mapping híbrido:</strong> combinación de photon-map + path-tracing para materiales especulares donde el photon map ayuda a converger en cáusticas.</li>
+      </ul>
+
+      <h3>Medios participativos y muestreo avanzado</h3>
+      <p>
+        Incluimos soporte básico para medios homogéneos (niebla). Para el muestreo de transmittancia se documenta la aproximación usada (exponencial) y la posibilidad de usar Equiangular Sampling y Volumetric Next Event Estimation como extensión futura.
+      </p>
+
+      <h3>Optimización y paralelismo en Haskell</h3>
+      <p>
+        Implementar en Haskell requirió decisiones concretas para obtener rendimiento:
+      </p>
+      <ul>
+        <li><strong>Estructuras estrictas:</strong> uso de vectores unboxed y patrones '!' (bang patterns) para evitar retención de thunks en loops críticos.</li>
+        <li><strong>Parallel/async:</strong> se usó la librería <code>async</code> y <code>Control.Parallel.Strategies</code> para dividir el render por tiles y consolidar resultados eficientemente.</li>
+        <li><strong>Memory layout:</strong> BVH con arrays contiguos para nodos; fotones almacenados en vectores y reconstrucción en paralelo del k-d tree.</li>
+        <li><strong>Interoperabilidad y scripts:</strong> scripts de orquestación en Bash y Ruby para distribución por SSH (modelo maestro/worker) y utilidades para convertir PPM→PNG.</li>
+      </ul>
+
+      <p>
+        Estas elecciones permitieron que, aun con la sobrecarga de un lenguaje de alto nivel, los tiempos de render fuesen comparables con implementaciones sencillas en C++ y con ventaja en seguridad de código y facilidad para razonar sobre invariantes.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>⚙️ Implementación — estructura del repositorio y comandos</h2>
+      <p>Resumen rápido de cómo está organizado el repo y comandos para reproducir:</p>
+      <pre><code># Compilar (stack o cabal)
+stack build --fast
+# Renderizar escena de ejemplo (scene1.cfg)
+stack exec grafica -- --scene scenes/scene1.cfg --width 1024 --height 768 --spp 256 --output out/scene1.ppm
+# Ejecutar photon mapping (dos fases)
+stack exec grafica -- --mode photons --scene scenes/caustic.cfg --nphotons 500000
+stack exec grafica -- --mode render --scene scenes/caustic.cfg --use-photon-map out/photons.kdt --spp 64
+</code></pre>
+
+      <p>En el PDF y en el README del repositorio están todas las escenas, parámetros y formatos de fichero descritos (archivos .cfg sencillos para reproducir condiciones experimentales).</p>
+    </section>
+
+    <section class="content-section">
+      <h2>📊 Resultados y benchmarking (detallado)</h2>
+      <p>
+        Incluimos comparativas visuales (en el PDF) y métricas numéricas: SNR aproximado por tiempo, convergencia por muestras por píxel, tiempo total por escena en hardware de pruebas (Intel i7, 16GB RAM). A modo de resumen:
+      </p>
+      <ul>
+        <li>BVH reduce coste de intersección en escenas complejas ~4–12× dependiendo de la distribución de triángulos.</li>
+        <li>Photon Mapping mejora notablemente representación de cáusticas versus path tracing puro con un coste adicional en memoria y tiempo durante la fase de emisión.</li>
+        <li>Paralelizar por tiles escala bien hasta el número de núcleos lógicos; la distribución por SSH aporta beneficios si hay varias máquinas con CPU disponible, aunque el overhead de transferencia y sincronización limita la eficiencia si las máquinas son lentas en I/O.</li>
+      </ul>
+
+      <p>
+        En la carpeta <code>benchmarks/</code> del repo están los scripts y los logs de ejecución. Los PDFs incluyen las imágenes comparativas para inspección visual de ruido/cáusticas/gamma-correction.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>🧩 Galería (ejemplos destacados)</h2>
+      <p>
+        (En la versión del repositorio hay una carpeta <code>renders/</code> con los PNGs exportados. Aquí apuntamos a las más relevantes):
+      </p>
+      <ul>
+        <li>Escena de cáustica: lámpara puntual + vaso de cristal — comparación PathTracer vs PhotonMapper.</li>
+        <li>Escena interior con luz de área: pruebas de MIS y NEE.</li>
+        <li>Escena con niebla: demostración de medios homogéneos y attenuación.</li>
+      </ul>
+    </section>
+
+    <section class="content-section">
+      <h2>📚 Referencias y lecturas recomendadas</h2>
+      <ul>
+        <li>Pharr, Jakob, and Humphreys — "Physically Based Rendering: From Theory to Implementation" (capítulos sobre Monte Carlo y photon mapping).</li>
+        <li>Jensen — "Realistic Image Synthesis Using Photon Mapping".</li>
+        <li>Veach — "Robust Monte Carlo Methods for Light Transport Simulation" (thesis, MIS).</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer id="contacto">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-title">Conecta conmigo</h3>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/J-solan" target="_blank" class="footer-link">→ GitHub</a>
+        <a href="https://www.linkedin.com/in/jorge-solan/" target="_blank" class="footer-link">→ LinkedIn</a>
+        <a href="mailto:jorgesolanmorote@gmail.com" class="footer-link">→ Email</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 | Jorge Solán Portfolio — Práctica Gráfica (Haskell)</p>
+    </div>
+  </footer>
+
+  <script src="../../js/main.js"></script>
+  <script src="../../js/components.js"></script>
+</body>
+</html>

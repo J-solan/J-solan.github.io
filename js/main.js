@@ -103,31 +103,55 @@ filterButtons.forEach(button => {
 });
 
 // ==================== THEME TOGGLE ====================
-const themeToggle = document.getElementById('themeToggle');
-let isDark = true;
+// Esta funcionalidad ahora está en components.js para reutilización
+// Mantener solo para la página principal si no usa components.js
 
-themeToggle.addEventListener('click', () => {
-    isDark = !isDark;
-    document.body.classList.toggle('light-theme');
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('themeToggle');
     
-    // Cambiar icono
-    const icon = themeToggle.querySelector('.icon');
-    icon.textContent = isDark ? '◐' : '◑';
-    
-    // Guardar preferencia (opcional)
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-});
-
-// Cargar tema guardado
-window.addEventListener('load', () => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-        themeToggle.click();
+    if (themeToggle && !window.themeInitialized) {
+        window.themeInitialized = true;
+        
+        // Aplicar tema guardado
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        applyTheme(savedTheme);
+        
+        // Event listener para el toggle
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Animación del botón
+            themeToggle.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                themeToggle.style.transform = 'rotate(0deg)';
+            }, 300);
+        });
     }
 });
 
-// ==================== NEURAL NETWORK VISUALIZATION - ELIMINADO ====================
-// Visualización eliminada para un diseño más limpio y profesional
+function applyTheme(theme) {
+    if (theme === 'light') {
+        document.body.classList.add('light-theme');
+    } else {
+        document.body.classList.remove('light-theme');
+    }
+    
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
+    
+    const icon = themeToggle.querySelector('.icon');
+    if (theme === 'light') {
+        icon.textContent = '●';
+        themeToggle.setAttribute('aria-label', 'Cambiar a tema oscuro');
+    } else {
+        icon.textContent = '☀';
+        themeToggle.setAttribute('aria-label', 'Cambiar a tema claro');
+    }
+}
 
 // ==================== TYPING EFFECT ====================
 function typeText(element, text, speed = 50) {

@@ -26,6 +26,67 @@
     --glow-transition: all 0.4s ease;
 }
 
+/* ==================== TEMA CLARO ==================== */
+body.light-theme {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-hover: #f1f5f9;
+
+    --accent-primary: #059669;
+    --accent-secondary: #0ea5e9;
+    --accent-glow: #8b5cf6;
+    --accent-warning: #dc2626;
+
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #94a3b8;
+
+    --code-bg: #f1f5f9;
+    --code-text: #0ea5e9;
+}
+
+body.light-theme #matrix-bg {
+    opacity: 0.03;
+}
+
+body.light-theme .terminal {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+body.light-theme .terminal-header {
+    background: #e2e8f0;
+}
+
+body.light-theme .project-card,
+body.light-theme .skill-category {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+body.light-theme .project-card:hover,
+body.light-theme .skill-category:hover {
+    box-shadow: 0 10px 40px rgba(5, 150, 105, 0.15);
+    border-color: var(--accent-primary);
+}
+
+body.light-theme header {
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid #e2e8f0;
+}
+
+body.light-theme .stats-bar {
+    background: var(--bg-secondary);
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+body.light-theme footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid #e2e8f0;
+}
+
 /* ==================== RESET & BASE ==================== */
 * {
     margin: 0;
@@ -141,6 +202,15 @@ header {
     background: var(--accent-primary);
     color: var(--bg-primary);
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+    transform: scale(1.05);
+}
+
+body.light-theme .theme-toggle {
+    border-color: var(--accent-primary);
+}
+
+body.light-theme .theme-toggle:hover {
+    box-shadow: 0 0 20px rgba(5, 150, 105, 0.3);
 }
 
 /* ==================== HERO SECTION ==================== */
@@ -396,6 +466,7 @@ header {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
+    grid-auto-rows: 1fr;
 }
 
 .project-card {
@@ -406,6 +477,11 @@ header {
     transition: var(--glow-transition);
     position: relative;
     overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 400px; 
 }
 
 .project-card::before {
@@ -429,6 +505,24 @@ header {
     border-color: var(--accent-primary);
     box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
 }
+
+.project-description {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.project-metrics {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: 8px;
+}
+
 
 .card-header {
     display: flex;
@@ -470,21 +564,6 @@ header {
     color: var(--text-primary);
     font-size: 1.4rem;
     margin-bottom: 1rem;
-}
-
-.project-description {
-    color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-}
-
-.project-metrics {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: var(--bg-primary);
-    border-radius: 8px;
 }
 
 .metric {

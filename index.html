@@ -23,8 +23,8 @@
                 <li><a href="#skills" class="nav-link">skills()</a></li>
                 <li><a href="#contacto" class="nav-link">contacto()</a></li>
             </ul>
-            <button class="theme-toggle" id="themeToggle">
-                <span class="icon">◐</span>
+            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                <span class="icon">☀</span>
             </button>
         </nav>
     </header>
@@ -104,103 +104,36 @@
         </div>
 
         <div class="projects-grid">
-            <!-- Proyecto 1
-            <div class="project-card" data-category="personal ml">
+            <!-- Proyectos -->
+             <div class="project-card" data-category="unizar">
                 <div class="card-header">
-                    <div class="card-icon">🤖</div>
+                    <div class="card-icon">📷</div>
                     <div class="card-status">
-                        <span class="status-dot active"></span> Activo
+                        <span class="status-dot active"></span> Finalizado
                     </div>
                 </div>
-                <h3>Predicción de Series Temporales</h3>
-                <p class="project-description">Modelo LSTM para predicción de demanda energética utilizando datos históricos y variables meteorológicas.</p>
+                <h3>Informática Gráfica. Simulación de escenas con Path Tracer y Photon Mapping en Haskell.</h3>
+                <p class="project-description">Creación desde cero de un Path Tracer y Photon Mapping para la simulación de escenas.</p>
                 <div class="project-metrics">
                     <div class="metric">
-                        <span class="metric-label">Accuracy</span>
-                        <span class="metric-value">94.2%</span>
+                        <span class="metric-label">Geometrías</span>
+                        <span class="metric-value">4</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-label">RMSE</span>
-                        <span class="metric-value">0.08</span>
+                        <span class="metric-label">Extras</span>
+                        <span class="metric-value">9</span>
                     </div>
                 </div>
                 <div class="tech-stack">
+                    <span class="tech-tag">Haskell</span>
                     <span class="tech-tag">Python</span>
-                    <span class="tech-tag">TensorFlow</span>
-                    <span class="tech-tag">LSTM</span>
-                    <span class="tech-tag">Pandas</span>
+                    <span class="tech-tag">Ruby</span>
                 </div>
                 <div class="card-footer">
-                    <a href="uoc/index.html" class="card-link">Ver detalles →</a>
-                    <a href="#" class="card-link github">GitHub</a>
+                    <a href="projects/unizar/haskell.html" class="card-link">Ver detalles →</a>
+                    <a href="https://github.com/J-solan/grafica" class="card-link github">GitHub</a>
                 </div>
             </div>
-
-            Proyecto 2
-            <div class="project-card" data-category="master ml">
-                <div class="card-header">
-                    <div class="card-icon">📊</div>
-                    <div class="card-status">
-                        <span class="status-dot"></span> Completado
-                    </div>
-                </div>
-                <h3>Análisis Exploratorio de Datos</h3>
-                <p class="project-description">EDA completo de dataset COVID-19, con visualizaciones interactivas y análisis estadístico avanzado.</p>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <span class="metric-label">Dataset</span>
-                        <span class="metric-value">500K</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-label">Variables</span>
-                        <span class="metric-value">45</span>
-                    </div>
-                </div>
-                <div class="tech-stack">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Seaborn</span>
-                    <span class="tech-tag">Plotly</span>
-                    <span class="tech-tag">Scipy</span>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="card-link">Ver detalles →</a>
-                    <a href="#" class="card-link github">GitHub</a>
-                </div>
-            </div>
-
-            Proyecto 3
-            <div class="project-card" data-category="personal">
-                <div class="card-header">
-                    <div class="card-icon">🔍</div>
-                    <div class="card-status">
-                        <span class="status-dot active"></span> En desarrollo
-                    </div>
-                </div>
-                <h3>Sistema de Recomendación NLP</h3>
-                <p class="project-description">Recomendador de contenido basado en análisis semántico con transformers y embeddings.</p>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <span class="metric-label">Precision</span>
-                        <span class="metric-value">87%</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-label">Users</span>
-                        <span class="metric-value">2.3K</span>
-                    </div>
-                </div>
-                <div class="tech-stack">
-                    <span class="tech-tag">BERT</span>
-                    <span class="tech-tag">FastAPI</span>
-                    <span class="tech-tag">Docker</span>
-                    <span class="tech-tag">MongoDB</span>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="card-link">Ver detalles →</a>
-                    <a href="#" class="card-link github">GitHub</a>
-                </div>
-            </div> -->
-
-            <!-- Proyecto 4 -->
             <div class="project-card" data-category="unizar">
                 <div class="card-header">
                     <div class="card-icon">🎓</div>
@@ -212,12 +145,12 @@
                 <p class="project-description">Simulación de un SPAD(Single-photon avalanche diode) con el software de Mitsuba 3 para capturas LOS y NLOS.</p>
                 <div class="project-metrics">
                     <div class="metric">
-                        <span class="metric-label">mAP</span>
-                        <span class="metric-value">91.5%</span>
+                        <span class="metric-label">Nota Final</span>
+                        <span class="metric-value">9.0</span>
                     </div>
                     <div class="metric">
-                        <span class="metric-label">FPS</span>
-                        <span class="metric-value">45</span>
+                        <span class="metric-label">Precisión</span>
+                        <span class="metric-value">75%</span>
                     </div>
                 </div>
                 <div class="tech-stack">
@@ -243,7 +176,7 @@
         <div class="skills-grid">
             <div class="skill-category">
                 <h3 class="category-title">
-                    <span class="icon">🐍</span> Languages & Core
+                    <span class="icon">💻</span> Languages & Core
                 </h3>
                 <div class="skill-bars">
                     <div class="skill-item">
@@ -266,32 +199,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <div class="skill-category">
-                <h3 class="category-title">
-                    <span class="icon">🤖</span> ML & AI
-                </h3>
-                <div class="skill-bars">
-                    <div class="skill-item">
-                        <span class="skill-name">TensorFlow / Keras</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 90%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">PyTorch</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 85%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">Scikit-learn</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 92%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
 
             <div class="skill-category">
                 <h3 class="category-title">
