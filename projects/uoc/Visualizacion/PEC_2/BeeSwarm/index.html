@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beeswarm Chart - Análisis de Estudiantes</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+
+    <div class="container">
+        <header>
+            <h1><span class="title-bracket">[</span> Análisis de Calificaciones <span class="title-bracket">]</span></h1>
+            <p class="subtitle">Visualización interactiva de datos de estudiantes</p>
+        </header>
+
+        <div class="main-layout">
+            <aside class="sidebar fade-in">
+                <div class="control-section">
+                    <!-- Selector de materia -->
+                    <div class="selector-group">
+                        <label class="selector-label">Materia a visualizar</label>
+                        <select id="subjectSelector" class="custom-select">
+                            <option value="">Selecciona una materia...</option>
+                        </select>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Selector de categoría de color -->
+                    <div class="selector-group">
+                        <label class="selector-label">Colorear por</label>
+                        <select id="categorySelector" class="custom-select">
+                            <option value="">Selecciona una categoría...</option>
+                        </select>
+                    </div>
+
+                    <!-- Leyenda dinámica -->
+                    <div id="legendContainer" class="legend-container"></div>
+
+                    <!-- Estadísticas -->
+                    <div id="statsContainer" class="stats-container"></div>
+                </div>
+            </aside>
+
+            <main class="chart-section fade-in">
+                <div class="chart-header">
+                    <h2>Distribución de Calificaciones</h2>
+                    <div class="chart-info" id="chartInfo"></div>
+                </div>
+                
+                <div class="chart-wrapper">
+                    <svg id="beeswarm"></svg>
+                    <div class="empty-state" id="emptyState">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                        <p>Selecciona una materia para comenzar</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
