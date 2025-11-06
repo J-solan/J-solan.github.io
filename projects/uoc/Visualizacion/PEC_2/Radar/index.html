@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparador de Pokémon | J-solan</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <!-- Canvas de fondo con efecto Matrix -->
+    <canvas id="matrix-bg"></canvas>
+
+    <div class="container">
+        <header>
+            <h1><span class="title-bracket">[</span> Comparador de Pokémon <span class="title-bracket">]</span></h1>
+            <p class="subtitle">Selecciona hasta 3 Pokémon para comparar sus estadísticas</p>
+        </header>
+
+        <div class="main-layout">
+            <!-- Sidebar con buscador -->
+            <aside class="sidebar fade-in">
+                <div class="search-section">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar...">
+                    </div>
+                    <div class="pokemon-list" id="pokemonList">
+                        <div class="loading">Cargando Pokémon...</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Área principal con gráfico -->
+            <main class="chart-section fade-in">
+                <div class="chart-header">
+                    <h2>Comparación de Estadísticas</h2>
+                </div>
+                
+                <!-- Leyenda mejorada con totales -->
+                <div class="enhanced-legend" id="enhancedLegend"></div>
+                
+                <div class="chart-wrapper">
+                    <canvas id="radarChart"></canvas>
+                    <div class="empty-state" id="emptyState">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        <p>Selecciona al menos un Pokémon para ver la comparación</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

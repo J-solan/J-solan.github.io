@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolución de Equipos de Fútbol</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+
+    <div class="container">
+        <header>
+            <h1><span class="title-bracket">[</span> Evolución de Equipos <span class="title-bracket">]</span></h1>
+            <p class="subtitle">Analiza la evolución de puntos por jornada en diferentes ligas españolas y temporadas</p>
+        </header>
+
+        <div class="main-layout">
+            <aside class="sidebar fade-in">
+                <div class="search-section">
+                    <!-- Selector de Liga -->
+                    <div class="selector-group">
+                        <label class="selector-label">Liga</label>
+                        <select id="leagueSelector" class="custom-select">
+                            <option value="">Selecciona una liga...</option>
+                        </select>
+                    </div>
+
+                    <!-- Selector de Temporada -->
+                    <div class="selector-group">
+                        <label class="selector-label">Temporada</label>
+                        <select id="seasonSelector" class="custom-select" disabled>
+                            <option value="">Primero selecciona una liga...</option>
+                        </select>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Buscador de equipos -->
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar equipo..." disabled>
+                    </div>
+
+                    <!-- Lista de equipos -->
+                    <div class="team-list" id="teamList">
+                        <div class="loading">Selecciona una liga y temporada para comenzar</div>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="chart-section fade-in">
+                <div class="chart-header">
+                    <h2>Evolución de Puntos por Jornada</h2>
+                    <div class="chart-info" id="chartInfo"></div>
+                </div>
+                
+                <div class="enhanced-legend" id="enhancedLegend"></div>
+                
+                <div class="chart-wrapper">
+                    <canvas id="lineChart"></canvas>
+                    <div class="empty-state" id="emptyState">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                        <p>Selecciona una liga, temporada y equipos para ver la evolución</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
