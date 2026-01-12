@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acto 2: Especialización</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <div class="header-content">
+                <div class="act-badge">ACTO 2</div>
+                <h1>El ADN de la Especialización</h1>
+                <p class="subtitle">Selecciona un país para descubrir sus "Feudos Deportivos".<br>
+                   Se muestran los eventos donde el país tiene mayor porcentaje de dominancia histórica.</p>
+            </div>
+            <div id="breadcrumb" class="breadcrumb" style="display: none;">
+                <span>Análisis desde: <strong id="source-info"></strong></span>
+                <a href="acto1.html" class="back-link">← Volver al Acto 1</a>
+            </div>
+        </header>
+
+        <div class="controls-wrapper">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label for="country-selector">PAÍS</label>
+                    <select id="country-selector">
+                        <option value="" disabled selected>Cargando...</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>MÉTRICA</label>
+                    <div class="toggle-container">
+                        <button id="btn-metric-eff" class="toggle-btn active" onclick="setMetric('dominance')">Eficiencia (%)</button>
+                        <button id="btn-metric-total" class="toggle-btn" onclick="setMetric('won')">Total Medallas</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="year-from">AÑO DESDE</label>
+                    <select id="year-from">
+                        <option value="1896">1896</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="year-to">AÑO HASTA</label>
+                    <select id="year-to">
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="chart-container" class="chart-container"></div>
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/app2.js"></script>
+</body>
+</html>
