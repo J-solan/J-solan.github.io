@@ -1,0 +1,77 @@
+[
+  {
+    "id": "tfg-spad-mitsuba",
+    "title": "TFG · Simulación de sensores SPAD",
+    "category": "Carrera",
+    "subject": "Trabajo Fin de Grado",
+    "year": "2024",
+    "status": "Finalizado",
+    "description": "Simulación de sensores SPAD para imagen transitoria: modelado de ruido, eficiencia e incertidumbre temporal sobre escenas LOS y NLOS en Mitsuba 3.",
+    "technologies": ["Python", "Mitsuba 3", "Dr.Jit", "SPAD", "NLOS"],
+    "links": {
+      "local": "projects/unizar/tfg/",
+      "repo": "https://github.com/J-solan/mitransient_SPAD",
+      "paper": "https://zaguan.unizar.es/record/149395/files/TAZ-TFG-2024-4202.pdf"
+    },
+    "featured": true
+  },
+  {
+    "id": "haskell-rendering",
+    "title": "Path Tracer & Photon Mapper",
+    "category": "Carrera",
+    "subject": "Informática Gráfica",
+    "year": "2024",
+    "status": "Finalizado",
+    "description": "Motor de renderizado en Haskell con path tracing, photon mapping, BVH, KD-tree y paralelismo para escenas con materiales físicos y cáusticas.",
+    "technologies": ["Haskell", "Path Tracing", "Photon Mapping", "BVH", "KD-tree"],
+    "links": {
+      "local": "projects/unizar/haskell-rendering/",
+      "repo": "https://github.com/J-solan/grafica",
+      "pathtracer": "assets/pathtracer.pdf",
+      "photonmapping": "assets/photonmapping.pdf"
+    },
+    "featured": true
+  },
+  {
+    "id": "deep-learning-practica-1",
+    "title": "Deep Learning · Práctica 1",
+    "category": "Máster",
+    "subject": "Deep Learning",
+    "year": "2025",
+    "status": "Archivado",
+    "description": "Entrenamiento y evaluación de redes convolucionales para clasificación de imágenes, revisando preprocesado, arquitectura y métricas.",
+    "technologies": ["Python", "Deep Learning", "CNN", "Jupyter"],
+    "links": {
+      "local": "projects/master/deep-learning/practica-1/"
+    },
+    "featured": false
+  },
+  {
+    "id": "deep-learning-practica-2",
+    "title": "Deep Learning · Práctica 2",
+    "category": "Máster",
+    "subject": "Deep Learning",
+    "year": "2025",
+    "status": "Archivado",
+    "description": "Experimentación con regularización, ajuste de hiperparámetros y comparación de configuraciones para mejorar generalización.",
+    "technologies": ["Python", "Keras", "Regularización", "Jupyter"],
+    "links": {
+      "local": "projects/master/deep-learning/practica-2/"
+    },
+    "featured": false
+  },
+  {
+    "id": "deep-learning-practica-3",
+    "title": "Deep Learning · Práctica 3",
+    "category": "Máster",
+    "subject": "Deep Learning",
+    "year": "2025",
+    "status": "Archivado",
+    "description": "Aplicación de transfer learning y fine-tuning sobre modelos preentrenados para adaptar redes profundas a un problema concreto.",
+    "technologies": ["Python", "Transfer Learning", "Fine-tuning", "Jupyter"],
+    "links": {
+      "local": "projects/master/deep-learning/practica-3/"
+    },
+    "featured": false
+  }
+]

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Resumen técnico del TFG de Jorge Solan sobre simulación de hardware SPAD en Mitsuba 3.">
+  <title>TFG · Simulación SPAD | Jorge Solan</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <nav class="nav" aria-label="Navegación del proyecto">
+      <a class="brand" href="../../../index.html#proyectos">
+        <span class="brand-mark">JS</span>
+        <span>Volver al portfolio</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu" data-nav-toggle>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <div class="nav-links" id="nav-menu">
+        <a href="#resumen">Resumen</a>
+        <a href="#metodo">Método</a>
+        <a href="#validacion">Validación</a>
+        <a href="#enlaces">Enlaces</a>
+      </div>
+      <button class="theme-toggle" type="button" aria-label="Cambiar tema" data-theme-toggle>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66 1.41-1.41M4.93 19.07l1.41-1.41m11.32 0 1.41 1.41M4.93 4.93l1.41 1.41M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/>
+        </svg>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <main id="contenido" class="project-page">
+    <nav class="project-breadcrumb" aria-label="Ruta">
+      <a href="../../../index.html#proyectos">← Proyectos</a>
+    </nav>
+    <section class="project-landing section">
+      <div>
+        <p class="section-label">Trabajo Fin de Grado · 2024</p>
+        <h1>Simulación de hardware de captura ultrarrápida de fotones.</h1>
+        <p class="hero-text">
+          Modelo de comportamiento de sensores SPAD integrado en Mitsuba 3 para acercar
+          la simulación de imagen transitoria al tipo de señal que registraría un sistema
+          físico de captura ultrarrápida.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="https://github.com/J-solan/mitransient_SPAD">GitHub</a>
+          <a class="button secondary" href="https://zaguan.unizar.es/record/149395/files/TAZ-TFG-2024-4202.pdf">Memoria PDF</a>
+        </div>
+      </div>
+      <aside class="project-facts" aria-label="Datos del proyecto">
+        <p class="section-label">Datos</p>
+        <dl>
+          <div><dt>Duración</dt><dd>10 meses</dd></div>
+          <div><dt>Nota</dt><dd>9.0</dd></div>
+          <div><dt>Stack</dt><dd>Python · Mitsuba 3 · Dr.Jit</dd></div>
+          <div><dt>Área</dt><dd>Transient imaging · NLOS · SPAD</dd></div>
+        </dl>
+      </aside>
+    </section>
+
+    <section class="project-content section" id="resumen">
+      <div class="project-section-heading">
+        <p class="section-label">Resumen</p>
+        <h2>Qué problema aborda</h2>
+      </div>
+      <div class="project-copy">
+        <p>
+          La imagen transitoria estudia la propagación de la luz con resolución temporal
+          extremadamente alta. Una de sus aplicaciones más interesantes es NLOS, donde se
+          intenta reconstruir información de objetos ocultos analizando luz indirecta.
+        </p>
+        <p>
+          El problema práctico es que el hardware real de captura es caro, delicado y difícil
+          de calibrar. Por eso muchas investigaciones usan simulación, pero los simuladores
+          suelen ignorar ruido propio del sensor. Este TFG se centra en reducir esa distancia
+          entre simulación y captura real modelando un sensor SPAD.
+        </p>
+        <p>
+          El trabajo parte de escenas base como Cornell Box y configuraciones NLOS-Z, pero
+          el interés no está en la escena en sí, sino en cómo se transforma la señal temporal
+          cuando se introduce el comportamiento del sensor.
+        </p>
+      </div>
+    </section>
+
+    <section class="project-content section" id="metodo">
+      <div class="project-section-heading">
+        <p class="section-label">Metodología</p>
+        <h2>Modelo e implementación</h2>
+      </div>
+      <div class="method-grid">
+        <article>
+          <span>01</span>
+          <h3>Estudio del sensor</h3>
+          <p>Se analizaron fuentes de ruido y limitaciones del SPAD: eficiencia de captura, incertidumbre temporal, crosstalk, afterpulsing y eventos no ideales.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Modelo computacional</h3>
+          <p>El comportamiento del hardware se trasladó a un modelo aplicable a histogramas temporales, conservando la estructura de escenas LOS y NLOS.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Integración en Mitsuba 3</h3>
+          <p>La implementación se apoyó en Python, Mitsuba 3, mitransient y Dr.Jit para simular transporte de luz con componente temporal.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="project-content section" id="validacion">
+      <div class="project-section-heading">
+        <p class="section-label">Validación</p>
+        <h2>Escenas base y análisis</h2>
+      </div>
+      <div>
+        <div class="project-copy">
+          <p>
+            La validación se hizo con escenas de línea de visión directa y sin línea de visión
+            directa. Cornell Box y NLOS-Z fueron geometrías de referencia para observar la
+            respuesta temporal, no el resultado final del trabajo.
+          </p>
+          <p>
+            En el trabajo completo se muestran resultados sobre cómo el modelo del sensor
+            modifica los histogramas y permite estudiar el impacto del ruido en reconstrucciones
+            NLOS. La memoria contiene las figuras y comparativas completas.
+          </p>
+        </div>
+        <div class="validation-notes">
+        <article>
+          <span>LOS</span>
+          <h3>Cornell Box</h3>
+          <p>Escena controlada para comprobar la forma del pulso temporal y la respuesta del sensor en visión directa.</p>
+        </article>
+        <article>
+          <span>NLOS</span>
+          <h3>NLOS-Z</h3>
+          <p>Configuración sin línea de visión directa para analizar transporte indirecto y pérdida de señal.</p>
+        </article>
+        <article>
+          <span>SPAD</span>
+          <h3>Histograma temporal</h3>
+          <p>Comparación entre señal ideal y señal degradada por el modelo de captura del hardware.</p>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-content section" id="enlaces">
+      <div class="project-section-heading">
+        <p class="section-label">Enlaces</p>
+        <h2>Material completo</h2>
+      </div>
+      <div class="resource-list">
+        <a class="project-resource" href="https://github.com/J-solan/mitransient_SPAD">Repositorio en GitHub</a>
+        <a class="project-resource" href="https://zaguan.unizar.es/record/149395/files/TAZ-TFG-2024-4202.pdf">Memoria completa en Zaguan</a>
+        <a class="project-resource back-resource" href="../../../index.html#proyectos">Volver a proyectos</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../../script.js"></script>
+</body>
+</html>

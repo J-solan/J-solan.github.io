@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Resumen técnico del proyecto de Informática Gráfica: Path Tracer y Photon Mapper en Haskell.">
+  <title>Path Tracer & Photon Mapper | Jorge Solan</title>
+  <link rel="stylesheet" href="../../../styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <nav class="nav" aria-label="Navegación del proyecto">
+      <a class="brand" href="../../../index.html#proyectos">
+        <span class="brand-mark">JS</span>
+        <span>Volver al portfolio</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu" data-nav-toggle>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <div class="nav-links" id="nav-menu">
+        <a href="#resumen">Resumen</a>
+        <a href="#pathtracer">Path Tracer</a>
+        <a href="#photonmapper">Photon Mapper</a>
+        <a href="#enlaces">Enlaces</a>
+      </div>
+      <button class="theme-toggle" type="button" aria-label="Cambiar tema" data-theme-toggle>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66 1.41-1.41M4.93 19.07l1.41-1.41m11.32 0 1.41 1.41M4.93 4.93l1.41 1.41M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/>
+        </svg>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <main id="contenido" class="project-page">
+    <nav class="project-breadcrumb" aria-label="Ruta">
+      <a href="../../../index.html#proyectos">← Proyectos</a>
+    </nav>
+    <section class="project-landing section">
+      <div>
+        <p class="section-label">Informática Gráfica · 2024</p>
+        <h1>Path Tracer & Photon Mapper con Haskell.</h1>
+        <p class="hero-text">
+          Implementación académica de renderizado físicamente basado, desarrollada en
+          Haskell con estructuras de aceleración, paralelismo y documentación técnica
+          separada para cada parte del proyecto.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="https://github.com/J-solan/grafica">GitHub</a>
+          <a class="button secondary" href="../../../assets/pathtracer.pdf">Path Tracer PDF</a>
+          <a class="button secondary" href="../../../assets/photonmapping.pdf">Photon Mapper PDF</a>
+        </div>
+      </div>
+      <aside class="project-facts" aria-label="Datos del proyecto">
+        <p class="section-label">Datos</p>
+        <dl>
+          <div><dt>Duración</dt><dd>~6 meses</dd></div>
+          <div><dt>Lenguaje</dt><dd>Haskell</dd></div>
+          <div><dt>Técnicas</dt><dd>Monte Carlo · BVH · KD-tree</dd></div>
+          <div><dt>Salida</dt><dd>PPM/BMP + documentación PDF</dd></div>
+        </dl>
+      </aside>
+    </section>
+
+    <section class="project-content section" id="resumen">
+      <div class="project-section-heading">
+        <p class="section-label">Resumen</p>
+        <h2>Qué hicimos</h2>
+      </div>
+      <div class="project-copy">
+        <p>
+          El proyecto implementa dos técnicas clásicas de síntesis de imagen: Path Tracing
+          y Photon Mapping. La parte interesante fue llevarlas a Haskell, manteniendo una
+          estructura clara y suficientemente eficiente para generar escenas con materiales
+          difusos, especulares y refractivos.
+        </p>
+        <p>
+          La página resume las decisiones principales. Los PDFs enlazados contienen la
+          explicación completa, resultados, parámetros y detalles matemáticos.
+        </p>
+      </div>
+    </section>
+
+    <section class="project-content section" id="pathtracer">
+      <div class="project-section-heading">
+        <p class="section-label">Path Tracer</p>
+        <h2>Renderizado por Monte Carlo</h2>
+      </div>
+      <div class="method-grid">
+        <article>
+          <span>PT</span>
+          <h3>Muestreo de caminos</h3>
+          <p>Aproximación de la ecuación de render mediante caminos aleatorios y acumulación de muestras por píxel.</p>
+        </article>
+        <article>
+          <span>NEE</span>
+          <h3>Luz directa</h3>
+          <p>Uso de técnicas como Next Event Estimation y muestreo de materiales para reducir ruido en escenas complejas.</p>
+        </article>
+        <article>
+          <span>BVH</span>
+          <h3>Aceleración</h3>
+          <p>Construcción de estructuras de intersección para evitar recorrer toda la escena en cada rayo.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="project-content section" id="photonmapper">
+      <div class="project-section-heading">
+        <p class="section-label">Photon Mapper</p>
+        <h2>Cáusticas y estimación local</h2>
+      </div>
+      <div>
+        <div class="project-copy">
+          <p>
+            El Photon Mapper añade una fase de emisión y almacenamiento de fotones para
+            estimar energía incidente en superficies. Esto permite representar mejor fenómenos
+            como cáusticas, donde el Path Tracer puro puede necesitar muchas muestras.
+          </p>
+        </div>
+        <div class="method-grid">
+          <article>
+            <span>01</span>
+            <h3>Emisión</h3>
+            <p>Fotones lanzados desde fuentes de luz con energía asociada y almacenamiento de impactos relevantes.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>KD-tree</h3>
+            <p>Organización espacial de fotones para consultas por vecinos y estimación de densidad.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Integración híbrida</h3>
+            <p>Uso conjunto con renderizado por caminos para resolver iluminación directa e indirecta sin duplicar el cálculo principal.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-content section" id="enlaces">
+      <div class="project-section-heading">
+        <p class="section-label">Enlaces</p>
+        <h2>Material completo</h2>
+      </div>
+      <div class="resource-list">
+        <a class="project-resource" href="https://github.com/J-solan/grafica">Repositorio en GitHub</a>
+        <a class="project-resource" href="../../../assets/pathtracer.pdf">Memoria Path Tracer</a>
+        <a class="project-resource" href="../../../assets/photonmapping.pdf">Memoria Photon Mapper</a>
+        <a class="project-resource back-resource" href="../../../index.html#proyectos">Volver a proyectos</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../../script.js"></script>
+</body>
+</html>

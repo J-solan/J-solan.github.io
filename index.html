@@ -1,363 +1,460 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Jorge Solán</title>
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Portfolio personal de Jorge Solan Morote: ingeniero informático, administrador de sistemas y estudiante de Data Science.">
+  <title>Jorge Solán | Sistemas, datos y proyectos</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Efecto de partículas de fondo -->
-    <canvas id="matrix-bg"></canvas>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <nav class="nav" aria-label="Navegación principal">
+      <a class="brand" href="#inicio" aria-label="Inicio">
+        <span class="brand-mark">JS</span>
+        <span>Jorge Solan</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu" data-nav-toggle>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+      <div class="nav-links" id="nav-menu">
+        <a href="#sobre-mi">Sobre mí</a>
+        <a href="#trayectoria">Trayectoria</a>
+        <a href="#proyectos">Proyectos</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+      <button class="theme-toggle" type="button" aria-label="Cambiar tema" data-theme-toggle>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66 1.41-1.41M4.93 19.07l1.41-1.41m11.32 0 1.41 1.41M4.93 4.93l1.41 1.41M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/>
+        </svg>
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
 
-    <header>
-        <nav class="navbar">
-            <div class="logo">
-                <span class="bracket">&lt;</span>
-                <span class="logo-text">Jorge Solán</span>
-                <span class="bracket">/&gt;</span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#inicio" class="nav-link">inicio()</a></li>
-                <li><a href="#proyectos" class="nav-link">proyectos[]</a></li>
-                <li><a href="#skills" class="nav-link">skills()</a></li>
-                <li><a href="#contacto" class="nav-link">contacto()</a></li>
-            </ul>
-            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
-                <span class="icon">☀</span>
-            </button>
-        </nav>
-    </header>
-
-    <section class="hero" id="inicio">
-        <div class="hero-content">
-            <div class="terminal">
-                <div class="terminal-header">
-                    <span class="terminal-btn red"></span>
-                    <span class="terminal-btn yellow"></span>
-                    <span class="terminal-btn green"></span>
-                </div>
-                <div class="terminal-body">
-                    <p class="terminal-line"><span class="prompt">$</span> whoami</p>
-                    <p class="terminal-output typing-effect">Data Scientist & System Administrator</p>
-                    <p class="terminal-line"><span class="prompt">$</span> cat education.txt</p>
-                    <p class="terminal-output typing-effect delay-1">Ingeniería Informática - Unizar</p>
-                    <p class="terminal-output typing-effect delay-1">Máster en Data Science - UOC</p>
-                    <p class="terminal-line"><span class="prompt">$</span> ls skills/</p>
-                    <p class="terminal-output typing-effect delay-2">Python  |  C++   |  Haskell   |  SQL  |  Linux</p>
-                    <p class="terminal-cursor">█</p>
-                </div>
-            </div>
-            
-            <div class="hero-buttons">
-                <a href="#proyectos" class="btn btn-primary">
-                    <span class="btn-icon">▶</span> Explorar Proyectos
-                </a>
-                <a href="#contacto" class="btn btn-secondary">
-                    <span class="btn-icon">✉</span> Contactar
-                </a>
-            </div>
+  <main id="contenido" data-project-source="data/projects.json">
+    <section class="hero section" id="inicio">
+      <div class="hero-copy">
+        <p class="section-label">Portfolio personal</p>
+        <h1>Sistemas y datos con base informática.</h1>
+        <p class="hero-text">
+          Soy Jorge Solán. Trabajo en administración de sistemas, especialmente en
+          monitorización y automatización de procesos, y estoy ampliando ese perfil con el Máster en
+          Data Science de la UOC.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#proyectos">Ver proyectos</a>
+          <a class="button secondary" href="assets/cv/CV_ES_JorgeSM.pdf">Descargar CV</a>
         </div>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <svg class="hero-svg" viewBox="0 0 500 370" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <style>
+              .hero-svg { overflow: visible; }
+              .hero-svg .metric-fill stop:first-child { stop-color: var(--accent); stop-opacity: 0.18; }
+              .hero-svg .metric-fill stop:last-child  { stop-color: var(--accent); stop-opacity: 0; }
+              .hero-svg .warm-fill stop:first-child   { stop-color: var(--warm); stop-opacity: 0.12; }
+              .hero-svg .warm-fill stop:last-child    { stop-color: var(--warm); stop-opacity: 0; }
+            </style>
+            <linearGradient id="metric-fill" class="metric-fill" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%"/>
+              <stop offset="100%"/>
+            </linearGradient>
+            <linearGradient id="warm-fill" class="warm-fill" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0%"/>
+              <stop offset="100%"/>
+            </linearGradient>
+            <clipPath id="chart-clip">
+              <rect x="58" y="70" width="414" height="170"/>
+            </clipPath>
+          </defs>
 
-        <div class="hero-visual">
-            <div class="data-viz">
-                <div class="neural-network" id="neuralNet"></div>
-            </div>
-        </div>
+          <!-- Card -->
+          <rect x="1" y="1" width="498" height="368" rx="16"
+            fill="var(--surface)" stroke="var(--border)" stroke-width="1.5"/>
+
+          <!-- Header -->
+          <rect x="1" y="1" width="498" height="52" rx="16" fill="var(--surface-strong)"/>
+          <rect x="1" y="36" width="498" height="17" fill="var(--surface-strong)"/>
+          <circle cx="32" cy="27" r="6" fill="var(--warm)" opacity="0.75"/>
+          <circle cx="52" cy="27" r="6" fill="var(--accent)" opacity="0.65"/>
+          <circle cx="72" cy="27" r="6" fill="var(--border)"/>
+          <text x="96" y="32" font-size="12" font-family="ui-monospace, monospace" fill="var(--muted)">sistema.monitor</text>
+          <text x="448" y="32" font-size="11" font-family="ui-monospace, monospace" fill="var(--accent)" text-anchor="middle">● live</text>
+
+          <!-- Y-axis labels -->
+          <text x="54" y="96" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="end">100%</text>
+          <text x="54" y="136" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="end">75%</text>
+          <text x="54" y="176" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="end">50%</text>
+          <text x="54" y="216" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="end">25%</text>
+
+          <!-- Grid lines -->
+          <g stroke="var(--border)" stroke-width="1" opacity="0.7">
+            <line x1="58" y1="93" x2="472" y2="93"/>
+            <line x1="58" y1="133" x2="472" y2="133"/>
+            <line x1="58" y1="173" x2="472" y2="173"/>
+            <line x1="58" y1="213" x2="472" y2="213"/>
+            <line x1="58" y1="240" x2="472" y2="240"/>
+          </g>
+
+          <!-- X-axis labels -->
+          <text x="58"  y="256" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="middle">00h</text>
+          <text x="141" y="256" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="middle">04h</text>
+          <text x="224" y="256" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="middle">08h</text>
+          <text x="307" y="256" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="middle">12h</text>
+          <text x="390" y="256" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="middle">16h</text>
+          <text x="472" y="256" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)" text-anchor="middle">20h</text>
+
+          <!-- Gradient fill under main line -->
+          <path clip-path="url(#chart-clip)"
+            d="M 58,158 C 90,164 112,168 141,164 C 172,160 196,90 224,85
+               C 252,80 277,105 307,101 C 337,97 360,148 390,144
+               C 418,140 445,132 472,135 L 472,240 L 58,240 Z"
+            fill="url(#metric-fill)"/>
+
+          <!-- Gradient fill under secondary line -->
+          <path clip-path="url(#chart-clip)"
+            d="M 58,192 C 100,188 122,187 141,185 C 166,183 196,184 224,181
+               C 254,178 279,180 307,176 C 335,172 360,174 390,171
+               C 418,168 447,166 472,163 L 472,240 L 58,240 Z"
+            fill="url(#warm-fill)"/>
+
+          <!-- Secondary line (warm, dashed) -->
+          <path clip-path="url(#chart-clip)"
+            d="M 58,192 C 100,188 122,187 141,185 C 166,183 196,184 224,181
+               C 254,178 279,180 307,176 C 335,172 360,174 390,171
+               C 418,168 447,166 472,163"
+            fill="none" stroke="var(--warm)" stroke-width="1.5"
+            stroke-linecap="round" stroke-dasharray="5 4" opacity="0.7"/>
+
+          <!-- Main metric line -->
+          <path clip-path="url(#chart-clip)"
+            d="M 58,158 C 90,164 112,168 141,164 C 172,160 196,90 224,85
+               C 252,80 277,105 307,101 C 337,97 360,148 390,144
+               C 418,140 445,132 472,135"
+            fill="none" stroke="var(--accent)" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Data points -->
+          <circle cx="141" cy="164" r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+          <circle cx="224" cy="85"  r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+          <circle cx="307" cy="101" r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+          <circle cx="390" cy="144" r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"/>
+
+          <!-- Current (live) point with pulse ring -->
+          <circle cx="472" cy="135" r="9"  fill="var(--accent)" opacity="0.15"/>
+          <circle cx="472" cy="135" r="5"  fill="var(--accent)"/>
+
+          <!-- Tooltip on peak -->
+          <rect x="198" y="60" width="76" height="22" rx="6" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+          <text x="236" y="75" font-size="10" font-family="ui-monospace, monospace" fill="var(--accent)" text-anchor="middle" font-weight="700">▲ 82% carga</text>
+
+          <!-- Separator -->
+          <line x1="24" y1="268" x2="476" y2="268" stroke="var(--border)" stroke-width="1"/>
+
+          <!-- Status indicators -->
+          <circle cx="52"  cy="300" r="5" fill="var(--accent)"/>
+          <text x="65"  y="297" font-size="11" font-family="ui-monospace, monospace" fill="var(--text)" font-weight="600">Icinga</text>
+          <text x="65"  y="311" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)">all checks OK</text>
+
+          <circle cx="208" cy="300" r="5" fill="var(--accent)"/>
+          <text x="221" y="297" font-size="11" font-family="ui-monospace, monospace" fill="var(--text)" font-weight="600">Grafana</text>
+          <text x="221" y="311" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)">99.8% uptime</text>
+
+          <circle cx="362" cy="300" r="5" fill="var(--warm)" opacity="0.85"/>
+          <text x="375" y="297" font-size="11" font-family="ui-monospace, monospace" fill="var(--text)" font-weight="600">Storage</text>
+          <text x="375" y="311" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)">Pure · NDU</text>
+
+          <!-- Legend -->
+          <line x1="24" y1="340" x2="48" y2="340" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+          <text x="54" y="344" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)">carga del sistema</text>
+          <line x1="196" y1="340" x2="220" y2="340" stroke="var(--warm)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="5 4"/>
+          <text x="226" y="344" font-size="10" font-family="ui-monospace, monospace" fill="var(--muted)">baseline</text>
+        </svg>
+      </div>
     </section>
 
-    <section class="stats-bar">
-        <div class="stat-item">
-            <span class="stat-number" data-target="5">0</span>
-            <span class="stat-label">Proyectos</span>
+    <section class="section split" id="sobre-mi">
+      <div>
+        <p class="section-label">Sobre mí</p>
+        <h2>Perfil técnico con base de sistemas y mirada de datos.</h2>
+      </div>
+      <div class="rich-text">
+        <p>
+          Trabajo en administración de sistemas con foco en monitorización, automatización,
+          mantenimiento de máquinas virtuales y soporte a entornos técnicos. En el día a día
+          combino Python, Bash, Icinga, Grafana y Jira para convertir operativa e incidencias
+          en información útil y accionable.
+        </p>
+        <p>
+          En paralelo estoy ampliando mi perfil hacia Data Science, con especial interés por
+          análisis, estadística, machine learning y visualización. También estoy participando
+          en tareas relacionadas con Pure Storage, instalación de nuevas cabinas y procesos
+          NDU, y próximamente empezaré a trabajar en un contexto similar con Oracle.
+        </p>
+        <div class="about-facts">
+          <div class="about-fact">
+            <strong>~2 años</strong>
+            <span>administrador de sistemas en Nologin</span>
+          </div>
+          <div class="about-fact">
+            <strong>9.0</strong>
+            <span>TFG en Ingeniería Informática</span>
+          </div>
+          <div class="about-fact">
+            <strong>2× 1.er puesto</strong>
+            <span>hackatones 2025</span>
+          </div>
         </div>
-        <div class="stat-item">
-            <span class="stat-number" data-target="5">0</span>
-            <span class="stat-label">Tecnologías</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-number" data-target="100">0</span>
-            <span class="stat-label">% Dedicación</span>
-        </div>
+      </div>
     </section>
 
-    <section class="container" id="proyectos">
-        <h2 class="section-title">
-            <span class="title-bracket">[</span>
-            Proyectos
-            <span class="title-bracket">]</span>
-        </h2>
-        
-        <div class="filter-tabs">
-            <button class="filter-btn active" data-filter="all">
-                <span class="filter-icon">●</span> Todos
-            </button>
-            <button class="filter-btn" data-filter="personal">
-                <span class="filter-icon">●</span> Personales
-            </button>
-            <button class="filter-btn" data-filter="master">
-                <span class="filter-icon">●</span> Máster UOC
-            </button>
-            <button class="filter-btn" data-filter="unizar">
-                <span class="filter-icon">●</span> Unizar
-            </button>
-        </div>
-
-        <div class="projects-grid">
-            <!-- Proyectos -->
-             <div class="project-card" data-category="unizar">
-                <div class="card-header">
-                    <div class="card-icon">📷</div>
-                    <div class="card-status">
-                        <span class="status-dot active"></span> Finalizado
-                    </div>
-                </div>
-                <h3>Informática Gráfica. Simulación de escenas con Path Tracer y Photon Mapping en Haskell.</h3>
-                <p class="project-description">Creación desde cero de un Path Tracer y Photon Mapping para la simulación de escenas.</p>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <span class="metric-label">Geometrías</span>
-                        <span class="metric-value">4</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-label">Extras</span>
-                        <span class="metric-value">9</span>
-                    </div>
-                </div>
-                <div class="tech-stack">
-                    <span class="tech-tag">Haskell</span>
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Ruby</span>
-                </div>
-                <div class="card-footer">
-                    <a href="projects/unizar/haskell.html" class="card-link">Ver detalles →</a>
-                    <a href="https://github.com/J-solan/grafica" class="card-link github">GitHub</a>
-                </div>
-            </div>
-            <div class="project-card" data-category="unizar">
-                <div class="card-header">
-                    <div class="card-icon">🎓</div>
-                    <div class="card-status">
-                        <span class="status-dot active"></span> Finalizado
-                    </div>
-                </div>
-                <h3>TFG - Simulación de hardware de captura ultrarrápida de fotones en transporte de luz.</h3>
-                <p class="project-description">Simulación de un SPAD(Single-photon avalanche diode) con el software de Mitsuba 3 para capturas LOS y NLOS.</p>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <span class="metric-label">Nota Final</span>
-                        <span class="metric-value">9.0</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-label">Precisión</span>
-                        <span class="metric-value">75%</span>
-                    </div>
-                </div>
-                <div class="tech-stack">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Mitsuba 3</span>
-                    <span class="tech-tag">DR. Jit</span>
-                </div>
-                <div class="card-footer">
-                    <a href="projects/unizar/tfg.html" class="card-link">Ver detalles →</a>
-                    <a href="https://github.com/J-solan/mitransient_SPAD" class="card-link github">GitHub</a>
-                </div>
-            </div>
-            <div class="project-card" data-category="master">
-                <div class="card-header">
-                    <div class="card-icon">🎓</div>
-                    <div class="card-status">
-                        <span class="status-dot active"></span> Finalizado
-                    </div>
-                </div>
-                <h3>PEC2 - Visualización de datos - Area Chart.</h3>
-                <p class="project-description">Visualización de datos con un gráfico de Área.</p>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <span class="metric-label">Nota Final</span>
-                        <span class="metric-value">9.8</span>
-                    </div>
-                </div>
-                <div class="tech-stack">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">HTML</span>
-                </div>
-                <div class="card-footer">
-                    <a href="projects/uoc/Visualizacion/PEC_2/Area/" class="card-link">Ver detalles →</a>
-                    <a href="https://github.com/J-solan/J-solan.github.io" class="card-link github">GitHub</a>
-                </div>
-            </div>
-            <div class="project-card" data-category="master">
-                <div class="card-header">
-                    <div class="card-icon">🎓</div>
-                    <div class="card-status">
-                        <span class="status-dot active"></span> Finalizado
-                    </div>
-                </div>
-                <h3>PEC2 - Visualización de datos - Radar Chart.</h3>
-                <p class="project-description">Visualización de datos con un gráfico Radial.</p>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <span class="metric-label">Nota Final</span>
-                        <span class="metric-value">9.8</span>
-                    </div>
-                </div>
-                <div class="tech-stack">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">HTML</span>
-                </div>
-                <div class="card-footer">
-                    <a href="projects/uoc/Visualizacion/PEC_2/Radar/" class="card-link">Ver detalles →</a>
-                    <a href="https://github.com/J-solan/J-solan.github.io" class="card-link github">GitHub</a>
-                </div>
-            </div>
-            <div class="project-card" data-category="master">
-                <div class="card-header">
-                    <div class="card-icon">🎓</div>
-                    <div class="card-status">
-                        <span class="status-dot active"></span> Finalizado
-                    </div>
-                </div>
-                <h3>PEC2 - Visualización de datos - Beeswarm Chart.</h3>
-                <p class="project-description">Visualización de datos con un gráfico de Beeswarm.</p>
-                <div class="project-metrics">
-                    <div class="metric">
-                        <span class="metric-label">Nota Final</span>
-                        <span class="metric-value">9.8</span>
-                    </div>
-                </div>
-                <div class="tech-stack">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">HTML</span>
-                </div>
-                <div class="card-footer">
-                    <a href="projects/uoc/Visualizacion/PEC_2/BeeSwarm/" class="card-link">Ver detalles →</a>
-                    <a href="https://github.com/J-solan/J-solan.github.io" class="card-link github">GitHub</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="container" id="skills">
-        <h2 class="section-title">
-            <span class="title-bracket">{</span>
-            Stack Tecnológico
-            <span class="title-bracket">}</span>
-        </h2>
-
-        <div class="skills-grid">
-            <div class="skill-category">
-                <h3 class="category-title">
-                    <span class="icon">💻</span> Languages & Core
-                </h3>
-                <div class="skill-bars">
-                    <div class="skill-item">
-                        <span class="skill-name">Python</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 90%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">R</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 75%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">SQL</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 70%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="skill-category">
-                <h3 class="category-title">
-                    <span class="icon">📊</span> Data & Viz
-                </h3>
-                <div class="skill-bars">
-                    <div class="skill-item">
-                        <span class="skill-name">Pandas / NumPy</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 85%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">Plotly / Matplotlib</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 77%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">Power BI / Tableau</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 72%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3 class="category-title">
-                    <span class="icon">🖥️</span> Linux & Infraestructuras
-                </h3>
-                <div class="skill-bars">
-                    <div class="skill-item">
-                        <span class="skill-name">Administración de servidores Linux</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 90%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">Automatización en Bash / Shell</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 93%"></div>
-                        </div>
-                    </div>
-                    <div class="skill-item">
-                        <span class="skill-name">Monitorización con Icinga / Grafana</span>
-                        <div class="skill-bar">
-                            <div class="skill-progress" style="--progress: 82%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            </div>
-        </div>
-    </section>
-
-    <footer id="contacto">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3 class="footer-title">Conecta conmigo</h3>
-            </div>
-            
-            <div class="footer-links">
-                <a href="https://github.com/J-solan" target="_blank" class="footer-link">
-                    <span class="link-icon">→</span> GitHub
-                </a>
-                <a href="https://www.linkedin.com/in/jorge-solan/" target="_blank" class="footer-link">
-                    <span class="link-icon">→</span> LinkedIn
-                </a>
-                <a href="mailto:jorgesolanmorote@gmail.com" class="footer-link">
-                    <span class="link-icon">→</span> Email
-                </a>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p class="copyright">
-                <br>
-                © 2025 | Jorge Solán Portfolio
+    <section class="section timeline-section" id="trayectoria">
+      <div class="section-heading">
+        <p class="section-label">Trayectoria</p>
+        <h2>Formación, trabajo y aprendizaje en curso</h2>
+      </div>
+      <div class="timeline">
+        <article class="timeline-card">
+          <div class="timeline-date">2024 - Actual</div>
+          <div class="timeline-body">
+            <h3>Administrador de Sistemas · Nologin</h3>
+            <p>
+              Trabajo en un equipo orientado a monitorización, automatización y operación de
+              entornos técnicos. Mi foco está en convertir tareas repetitivas e indicadores de
+              sistemas en procesos más claros y mantenibles.
             </p>
-        </div>
-    </footer>
+            <ul class="timeline-points">
+              <li>Monitorización con Icinga y Prometheus, visualización con Grafana.</li>
+              <li>Automatizaciones y métricas con Python y Bash.</li>
+              <li>Administración y mantenimiento de sistemas y máquinas virtuales.</li>
+            </ul>
+            <div class="timeline-tags">
+              <span>Sistemas y monitorización</span>
+              <span>Automatización</span>
+              <span>Storage</span>
+            </div>
+          </div>
+        </article>
 
-    <script src="js/main.js"></script>
-    <script src="js/particles.js"></script>
+        <article class="timeline-card highlight-card">
+          <div class="timeline-date">2025 - Actual</div>
+          <div class="timeline-body">
+            <h3>Máster en Data Science · UOC</h3>
+            <p>
+              Fuera del trabajo, lo que más me gusta y me llama la atención es el mundo de los datos. Siempre
+              he tenido ganas de entender bien la estadística, el aprendizaje automático
+              y cómo se construyen modelos reales. El máster es la forma de hacerlo con rigor.
+            </p>
+            <div class="master-subjects" aria-label="Asignaturas del máster">
+              <article>
+                <span>Activa</span>
+                <strong>Deep Learning</strong>
+                <p>Redes convolucionales, regularización, transfer learning y ajuste de modelos.</p>
+              </article>
+              <article>
+                <span>Cursada</span>
+                <strong>Estadística y análisis</strong>
+                <p>Fundamentos estadísticos, limpieza de datos y visualización aplicada.</p>
+              </article>
+              <article>
+                <span>Próxima</span>
+                <strong>Machine Learning</strong>
+                <p>Modelos supervisados y no supervisados, evaluación y despliegue.</p>
+              </article>
+            </div>
+          </div>
+        </article>
+
+        <article class="timeline-card">
+          <div class="timeline-date">2020 - 2024</div>
+          <div class="timeline-body">
+            <h3>Grado en Ingeniería Informática · Universidad de Zaragoza</h3>
+            <p>
+              Especialidad en Computación, con una base fuerte en programación, matemáticas,
+              estadística y razonamiento algorítmico.
+            </p>
+            <p>
+              TFG calificado con 9.0: simulación de hardware SPAD para captura ultrarrápida de
+              fotones en transporte de luz, desarrollando en Python sobre Mitsuba 3.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="section-heading compact">
+        <p class="section-label">Skills</p>
+        <h2>Áreas que conectan mi trabajo y mis proyectos</h2>
+      </div>
+      <div class="skill-grid">
+        <article class="skill-card">
+          <h3>Programación</h3>
+          <p>Python, Bash, C++, Go, Haskell y R para automatización, análisis y desarrollo técnico.</p>
+        </article>
+        <article class="skill-card">
+          <h3>Datos e IA</h3>
+          <p>SQL, pandas, scikit-learn, PyTorch, limpieza de datos, análisis estadístico y visualización.</p>
+        </article>
+        <article class="skill-card">
+          <h3>Sistemas</h3>
+          <p>Administración de máquinas virtuales, monitorización con Icinga y Prometheus, dashboards con Grafana y gestión en Jira.</p>
+        </article>
+        <article class="skill-card">
+          <h3>Storage</h3>
+          <p>Instalación de cabinas Pure Storage, procesos NDU y aprendizaje aplicado a nuevos entornos Oracle.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section achievements" id="logros">
+      <div class="section-heading compact">
+        <p class="section-label">Logros</p>
+        <h2>Hackatones y actividad personal</h2>
+      </div>
+      <div class="achievement-list">
+        <article>
+          <span>3.º puesto</span>
+          <strong>Hackaton Codelab 2024</strong>
+        </article>
+        <article>
+          <span>1er puesto</span>
+          <strong>Hackaton Openred 2025</strong>
+        </article>
+        <article>
+          <span>1er puesto</span>
+          <strong>Hackaton Codelab 2025</strong>
+        </article>
+        <article>
+          <span class="warm-badge">Personal</span>
+          <strong>Jugador activo y entrenador de voleibol 2022-2023</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="section projects-section" id="proyectos">
+      <div class="section-heading project-heading">
+        <div>
+          <p class="section-label">Proyectos</p>
+          <h2>Archivo de prácticas y proyectos</h2>
+        </div>
+      </div>
+      <div class="filters" aria-label="Filtros de proyectos">
+        <button class="filter-button active" type="button" data-filter="Todos">Todos</button>
+        <button class="filter-button" type="button" data-filter="Personal">Personal</button>
+        <button class="filter-button" type="button" data-filter="Carrera">Carrera</button>
+        <button class="filter-button" type="button" data-filter="Máster">Máster</button>
+      </div>
+      <div class="project-grid" data-project-grid aria-live="polite"></div>
+      <p class="empty-state" data-empty-state hidden>No hay proyectos en esta categoría todavía.</p>
+    </section>
+
+    <section class="section contact" id="contacto">
+      <div>
+        <p class="section-label">Contacto</p>
+        <h2>Dónde encontrarme</h2>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:jorgesolanmorote@gmail.com">jorgesolanmorote@gmail.com</a>
+        <a href="https://github.com/j-solan">github.com/j-solan</a>
+        <a href="https://linkedin.com/in/jorge-solan/">linkedin.com/in/jorge-solan</a>
+        <a href="assets/cv/CV_ES_JorgeSM.pdf">CV en PDF</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Jorge Solan Morote · 2026</span>
+    <span>Sistemas · Data Science · Portfolio personal</span>
+  </footer>
+
+  <script id="project-data" type="application/json">
+[
+  {
+    "id": "tfg-spad-mitsuba",
+    "title": "TFG · Simulación de sensores SPAD",
+    "category": "Carrera",
+    "subject": "Trabajo Fin de Grado",
+    "year": "2024",
+    "status": "Finalizado",
+    "description": "Simulación de sensores SPAD para imagen transitoria: modelado de ruido, eficiencia e incertidumbre temporal sobre escenas LOS y NLOS en Mitsuba 3.",
+    "technologies": ["Python", "Mitsuba 3", "Dr.Jit", "SPAD", "NLOS"],
+    "links": {
+      "local": "projects/unizar/tfg/",
+      "repo": "https://github.com/J-solan/mitransient_SPAD",
+      "paper": "https://zaguan.unizar.es/record/149395/files/TAZ-TFG-2024-4202.pdf"
+    },
+    "featured": true
+  },
+  {
+    "id": "haskell-rendering",
+    "title": "Path Tracer & Photon Mapper",
+    "category": "Carrera",
+    "subject": "Informática Gráfica",
+    "year": "2024",
+    "status": "Finalizado",
+    "description": "Motor de renderizado en Haskell con path tracing, photon mapping, BVH, KD-tree y paralelismo para escenas con materiales físicos y cáusticas.",
+    "technologies": ["Haskell", "Path Tracing", "Photon Mapping", "BVH", "KD-tree"],
+    "links": {
+      "local": "projects/unizar/haskell-rendering/",
+      "repo": "https://github.com/J-solan/grafica",
+      "pathtracer": "assets/pathtracer.pdf",
+      "photonmapping": "assets/photonmapping.pdf"
+    },
+    "featured": true
+  },
+  {
+    "id": "deep-learning-practica-1",
+    "title": "Deep Learning · Práctica 1",
+    "category": "Máster",
+    "subject": "Deep Learning",
+    "year": "2025",
+    "status": "Archivado",
+    "description": "Entrenamiento y evaluación de redes convolucionales para clasificación de imágenes, revisando preprocesado, arquitectura y métricas.",
+    "technologies": ["Python", "Deep Learning", "CNN", "Jupyter"],
+    "links": {
+      "local": "projects/master/deep-learning/practica-1/"
+    },
+    "featured": false
+  },
+  {
+    "id": "deep-learning-practica-2",
+    "title": "Deep Learning · Práctica 2",
+    "category": "Máster",
+    "subject": "Deep Learning",
+    "year": "2025",
+    "status": "Archivado",
+    "description": "Experimentación con regularización, ajuste de hiperparámetros y comparación de configuraciones para mejorar generalización.",
+    "technologies": ["Python", "Keras", "Regularización", "Jupyter"],
+    "links": {
+      "local": "projects/master/deep-learning/practica-2/"
+    },
+    "featured": false
+  },
+  {
+    "id": "deep-learning-practica-3",
+    "title": "Deep Learning · Práctica 3",
+    "category": "Máster",
+    "subject": "Deep Learning",
+    "year": "2025",
+    "status": "Archivado",
+    "description": "Aplicación de transfer learning y fine-tuning sobre modelos preentrenados para adaptar redes profundas a un problema concreto.",
+    "technologies": ["Python", "Transfer Learning", "Fine-tuning", "Jupyter"],
+    "links": {
+      "local": "projects/master/deep-learning/practica-3/"
+    },
+    "featured": false
+  }
+]
+
+  </script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -15,4 +15,4 @@ Este proyecto es de código abierto. Siéntete libre de usarlo y modificarlo par
 
 ---
 
-*Última actualización: Octubre 2025*
+*Última actualización: Junio 2026*
