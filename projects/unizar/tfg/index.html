@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Un modelo de sensores SPAD integrado en Mitsuba 3 para estudiar cómo el ruido y las limitaciones del hardware cambian una captura de imagen transitoria.">
+    <meta name="theme-color" content="#f3eee4">
+    <title>TFG · Simulación de sensores SPAD — Jorge Solán</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/data/projects.js" defer></script>
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header">
+      <nav class="site-nav shell" aria-label="Navegación principal">
+        <a class="signature" href="/" aria-label="Jorge Solán, inicio">Jorge Solán</a>
+        <div class="nav-links">
+          <a href="/proyectos/" data-nav-projects>Proyectos</a>
+          <a href="/#sobre-mi">Sobre mí</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <article class="project-page shell">
+        <nav class="breadcrumbs" aria-label="Ruta del proyecto">
+          <a href="/proyectos/">proyectos</a><span aria-hidden="true">/</span>
+          <a href="/proyectos/#carrera">carrera</a><span aria-hidden="true">/</span>
+          <span aria-current="page">tfg-spad</span>
+        </nav>
+
+        <header class="project-hero">
+          <div>
+            <div class="project-meta"><span>Carrera</span><span>2024</span></div>
+            <h1>TFG · Simulación de sensores SPAD</h1>
+            <p class="project-deck">Un modelo de sensores SPAD integrado en Mitsuba 3 para estudiar cómo el ruido y las limitaciones del hardware cambian una captura de imagen transitoria.</p>
+          </div>
+          <aside class="project-facts" aria-label="Datos del proyecto">
+            <p class="eyebrow">Ficha</p>
+            <dl>
+              <div><dt>Formato</dt><dd>Página de proyecto</dd></div>
+              <div><dt>Tecnologías</dt><dd>Python · Mitsuba 3 · Dr.Jit · SPAD · NLOS</dd></div>
+            </dl>
+          </aside>
+        </header>
+
+        <div class="project-body-grid">
+          <aside class="project-navigation">
+            <section class="project-browser" aria-labelledby="carpeta-carrera">
+              <p class="eyebrow" id="carpeta-carrera">Carpeta / carrera</p>
+              <nav data-project-navigation data-category="Carrera" data-current-project="tfg-spad" aria-label="Otros proyectos de carrera"></nav>
+            </section>
+            <nav class="page-index" aria-label="En esta página">
+              <p class="eyebrow">En esta página</p>
+              <ol>
+                <li><a href="#simulacion-real">Acercar la simulación al sensor real</a></li>
+                <li><a href="#modelo">Del sensor al modelo</a></li>
+                <li><a href="#comprobacion">Cómo lo comprobé</a></li>
+              </ol>
+            </nav>
+          </aside>
+
+          <div class="project-document">
+            <section class="resource-panel" aria-labelledby="recursos-proyecto">
+              <div class="resource-panel-head">
+                <div><p class="eyebrow">Recursos</p><h2 id="recursos-proyecto">Código y documentación</h2></div>
+                <span>2 entradas</span>
+              </div>
+              <div class="resource-file-list">
+                <a href="https://github.com/J-solan/mitransient_SPAD">
+                  <span class="resource-type" aria-hidden="true">git</span>
+                  <span><strong>Repositorio en GitHub</strong><small>J-solan / mitransient_SPAD</small></span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+                <a href="https://zaguan.unizar.es/record/149395/files/TAZ-TFG-2024-4202.pdf">
+                  <span class="resource-type" aria-hidden="true">pdf</span>
+                  <span><strong>Memoria completa</strong><small>Zaguan · Universidad de Zaragoza</small></span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </section>
+
+            <div class="project-prose prose">
+              <section id="simulacion-real">
+                <h2>Acercar la simulación al sensor real</h2>
+                <p>La imagen transitoria estudia cómo se propaga la luz con una resolución temporal muy alta. Una de sus aplicaciones es la imagen NLOS: intentar recuperar información de un objeto que no vemos directamente a partir de la luz que rebota por la escena.</p>
+                <p>El hardware capaz de registrar estas señales es caro, delicado y difícil de calibrar. Por eso es habitual trabajar con simulaciones, aunque una simulación ideal no refleja por sí sola todo lo que ocurre al capturar la señal. En este TFG modelé el comportamiento de un sensor SPAD para reducir esa distancia entre la señal simulada y la que produciría un sistema físico.</p>
+                <p>El trabajo duró diez meses y obtuvo una nota de 9,0.</p>
+              </section>
+
+              <section id="modelo">
+                <h2>Del sensor al modelo</h2>
+                <p>Primero estudié varias fuentes de ruido y limitaciones de los SPAD: la eficiencia de captura, la incertidumbre temporal, el <em>crosstalk</em>, el <em>afterpulsing</em> y otros eventos no ideales.</p>
+                <p>Después trasladé ese comportamiento a un modelo que puede aplicarse sobre histogramas temporales. La implementación se integra con Mitsuba 3 y <code>mitransient</code>, y usa Python y Dr.Jit para trabajar con el transporte de luz con componente temporal.</p>
+              </section>
+
+              <section id="comprobacion">
+                <h2>Cómo lo comprobé</h2>
+                <p>Usé escenas con línea de visión directa y sin ella. La Cornell Box sirve como entorno controlado para observar la forma del pulso y la respuesta del sensor; la configuración NLOS-Z permite estudiar el transporte indirecto y la pérdida de señal cuando el objeto queda oculto.</p>
+                <div class="project-media-grid">
+                  <img src="/assets/cornell-box.gif" width="389" height="389" loading="lazy" alt="Secuencia temporal de la escena Cornell Box usada para comprobar el modelo SPAD.">
+                  <img src="/assets/nlos-Z.gif" width="389" height="389" loading="lazy" alt="Secuencia temporal de la configuración NLOS-Z, con transporte de luz indirecto.">
+                </div>
+                <p>El resultado permite comparar el histograma ideal con la señal degradada por el modelo de captura y analizar cómo ese ruido afecta a las reconstrucciones NLOS. Las figuras, las comparativas y el desarrollo completo están en la memoria del proyecto.</p>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <nav class="project-switcher" aria-label="Continuar navegando por proyectos">
+          <a href="/projects/unizar/haskell-rendering/"><span>Siguiente en carrera</span><strong>Path Tracer &amp; Photon Mapper</strong><b aria-hidden="true">→</b></a>
+        </nav>
+      </article>
+    </main>
+
+    <footer class="site-footer" id="contacto">
+      <div class="shell footer-grid">
+        <div><p class="eyebrow">Contacto</p><h2>Si quieres contarme algo, escríbeme.</h2></div>
+        <ul class="contact-list" aria-label="Formas de contacto">
+          <li><a href="mailto:jorgesolanmorote@gmail.com">jorgesolanmorote@gmail.com</a></li>
+          <li><a href="https://github.com/J-solan">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/jorge-solan/">LinkedIn</a></li>
+        </ul>
+      </div>
+      <div class="shell footer-note"><span>Jorge Solán Morote</span><span>Portfolio personal · 2026</span></div>
+    </footer>
+  </body>
+</html>

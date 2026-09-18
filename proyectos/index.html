@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Archivo de proyectos de carrera y del máster de Jorge Solán.">
+    <meta name="theme-color" content="#f3eee4">
+    <title>Proyectos — Jorge Solán</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/data/projects.js" defer></script>
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header">
+      <nav class="site-nav shell" aria-label="Navegación principal">
+        <a class="signature" href="/" aria-label="Jorge Solán, inicio">Jorge Solán</a>
+        <div class="nav-links">
+          <a href="/proyectos/" data-nav-projects>Proyectos</a>
+          <a href="/#sobre-mi">Sobre mí</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <header class="page-intro shell">
+        <div>
+          <p class="eyebrow">Archivo</p>
+          <h1>Proyectos</h1>
+        </div>
+        <p>Un archivo para recorrer trabajos de la carrera y cuadernos del máster. Entra en una carpeta o abre directamente el proyecto que te interese.</p>
+      </header>
+
+      <div class="archive shell archive-layout">
+        <aside class="repo-sidebar" aria-label="Carpetas del archivo">
+          <div class="repo-sidebar-head">
+            <span class="status-dot" aria-hidden="true"></span>
+            <strong>jorge / proyectos</strong>
+          </div>
+          <nav data-project-tree aria-label="Categorías de proyectos"></nav>
+          <p class="repo-sidebar-note">Las páginas de carrera mezclan una explicación breve con enlaces al código y las memorias. Los cuadernos del máster se abren tal cual se exportaron desde Jupyter.</p>
+        </aside>
+
+        <div class="archive-content">
+          <section class="archive-group repository-panel" id="carrera" data-project-group>
+            <div class="repo-toolbar">
+              <h2><span class="tree-folder" aria-hidden="true"></span> carrera /</h2>
+              <span data-project-count></span>
+            </div>
+            <div class="project-list" data-project-list data-category="Carrera" data-view="repository"></div>
+          </section>
+
+          <section class="archive-group repository-panel" id="master" data-project-group>
+            <div class="repo-toolbar">
+              <h2><span class="tree-folder" aria-hidden="true"></span> master / deep-learning /</h2>
+              <span data-project-count></span>
+            </div>
+            <div class="project-list" data-project-list data-category="Máster" data-view="repository"></div>
+          </section>
+
+          <section class="archive-group repository-panel" id="personal" data-project-group hidden>
+            <div class="repo-toolbar">
+              <h2><span class="tree-folder" aria-hidden="true"></span> personal /</h2>
+              <span data-project-count></span>
+            </div>
+            <div class="project-list" data-project-list data-category="Personal" data-view="repository"></div>
+          </section>
+
+          <noscript><p>El archivo necesita JavaScript para construir el listado de proyectos.</p></noscript>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer" id="contacto">
+      <div class="shell footer-grid">
+        <div>
+          <p class="eyebrow">Contacto</p>
+          <h2>Si quieres contarme algo, escríbeme.</h2>
+        </div>
+        <ul class="contact-list" aria-label="Formas de contacto">
+          <li><a href="mailto:jorgesolanmorote@gmail.com">jorgesolanmorote@gmail.com</a></li>
+          <li><a href="https://github.com/J-solan">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/jorge-solan/">LinkedIn</a></li>
+        </ul>
+      </div>
+      <div class="shell footer-note">
+        <span>Jorge Solán Morote</span>
+        <span>Portfolio personal · 2026</span>
+      </div>
+    </footer>
+  </body>
+</html>
