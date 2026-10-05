@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Limpieza y análisis de un dataset de vuelos y clima: Random Forest, K-means y un contraste de hipótesis sobre la lluvia.">
+    <meta name="theme-color" content="#f3eee4">
+    <title>Tipología de datos · Práctica 2 — Jorge Solán</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/data/projects.js" defer></script>
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header">
+      <nav class="site-nav shell" aria-label="Navegación principal">
+        <a class="signature" href="/" aria-label="Jorge Solán, inicio">Jorge Solán</a>
+        <div class="nav-links">
+          <a href="/proyectos/" data-nav-projects>Proyectos</a>
+          <a href="/#sobre-mi">Sobre mí</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <article class="project-page shell">
+        <nav class="breadcrumbs" aria-label="Ruta del proyecto">
+          <a href="/proyectos/">proyectos</a><span aria-hidden="true">/</span>
+          <a href="/proyectos/#tipologia-datos">master / tipologia-datos</a><span aria-hidden="true">/</span>
+          <span aria-current="page">practica-2</span>
+        </nav>
+
+        <header class="project-hero">
+          <div>
+            <div class="project-meta"><span>Máster</span><span>2026</span></div>
+            <h1>Tipología de datos · Práctica 2</h1>
+            <p class="project-deck">Limpieza y análisis del dataset de vuelos y clima: Random Forest para predecir la gravedad de las incidencias, K-means y un contraste de hipótesis sobre la lluvia.</p>
+          </div>
+          <aside class="project-facts" aria-label="Datos del proyecto">
+            <p class="eyebrow">Ficha</p>
+            <dl>
+              <div><dt>Formato</dt><dd>Página de proyecto</dd></div>
+              <div><dt>Asignatura</dt><dd>M2.851 Tipología y ciclo de vida de los datos</dd></div>
+              <div><dt>Tecnologías</dt><dd>Python · pandas · scikit-learn · SciPy · Jupyter</dd></div>
+            </dl>
+          </aside>
+        </header>
+
+        <div class="project-body-grid">
+          <aside class="project-navigation">
+            <section class="project-browser" aria-labelledby="carpeta-tipologia">
+              <p class="eyebrow" id="carpeta-tipologia">Carpeta / tipologia-datos</p>
+              <nav data-project-navigation data-category="Máster" data-subject="tipologia-datos" data-current-project="tipologia-datos-practica-2" aria-label="Prácticas de Tipología de datos"></nav>
+            </section>
+            <nav class="page-index" aria-label="En esta página">
+              <p class="eyebrow">En esta página</p>
+              <ol>
+                <li><a href="#dataset">Un dataset mejorado</a></li>
+                <li><a href="#limpieza">Limpieza</a></li>
+                <li><a href="#modelos">Random Forest y K-means</a></li>
+                <li><a href="#lluvia">¿Retrasa la lluvia los vuelos?</a></li>
+              </ol>
+            </nav>
+          </aside>
+
+          <div class="project-document">
+            <section class="resource-panel" aria-labelledby="recursos-proyecto">
+              <div class="resource-panel-head">
+                <div><p class="eyebrow">Recursos</p><h2 id="recursos-proyecto">Código y análisis</h2></div>
+                <span>1 entrada</span>
+              </div>
+              <div class="resource-file-list">
+                <a href="https://github.com/J-solan/Pract2_Tipologia">
+                  <span class="resource-type" aria-hidden="true">git</span>
+                  <span><strong>Repositorio en GitHub</strong><small>J-solan / Pract2_Tipologia · scripts y notebook del análisis</small></span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </section>
+
+            <div class="project-prose prose">
+              <section id="dataset">
+                <h2>Un dataset mejorado</h2>
+                <p>Esta práctica, que hice yo solo, parte de la <a href="/projects/master/tipologia-datos/practica-1/">práctica 1</a> con la misma pregunta: ¿influye el clima en los retrasos y cancelaciones de los vuelos? La diferencia es que ahora la fuente de vuelos incluye también los que salen sin problemas, así que hay contra qué comparar.</p>
+                <p>Cada vuelo recibe una gravedad de 0 a 4 según los minutos de retraso en la salida: 0 por debajo de 20 minutos, 1 hasta 45, 2 hasta 90, 3 por encima de hora y media y 4 si se cancela. El dataset final tiene unos 24.900 vuelos de los diez aeropuertos con más tráfico de España.</p>
+              </section>
+
+              <section id="limpieza">
+                <h2>Limpieza</h2>
+                <p>A veces una estación de AEMET deja huecos. Para temperatura y viento, que cambian de forma bastante continua, los relleno con interpolación lineal dentro de cada ciudad. Con la lluvia no, porque inventarse una precipitación no tiene sentido: lo que falta se pone a cero.</p>
+                <p>En los vuelos descarto los que no tienen información suficiente, como los desviados o los que no dicen si llegaron, y separo la compañía y los códigos ICAO de origen y destino. La hora de salida la codifico con seno y coseno, para que las 23:59 queden cerca de las 00:00 en lugar de en el extremo opuesto.</p>
+              </section>
+
+              <section id="modelos">
+                <h2>Random Forest y K-means</h2>
+                <p>El Random Forest usa la hora, la lluvia y la temperatura en el momento de la salida, la racha de viento y, codificadas en <em>one-hot</em>, la compañía y los aeropuertos. Con validación cruzada de cinco particiones llega a una exactitud de 0,82.</p>
+                <p>Con las cancelaciones es conservador: cuando predice una, acierta el 92 % de las veces, pero solo detecta el 57 % de ellas. Hay unas cincuenta cancelaciones frente a más de quince mil vuelos sin problemas, y ese desequilibrio se nota.</p>
+                <p>El K-means con cinco grupos no fue tan útil: tres de ellos tienen una gravedad media casi igual y no se separan bien.</p>
+              </section>
+
+              <section id="lluvia">
+                <h2>¿Retrasa la lluvia los vuelos?</h2>
+                <p>La lluvia resultó ser la variable climática que menos pesaba en el modelo, así que quise comprobarla aparte. Separé los vuelos que salen con al menos 0,5 mm de lluvia de los que salen en seco. Los datos no eran normales ni tenían varianzas iguales, por eso usé la prueba t de Welch.</p>
+                <p>Con lluvia, el retraso medio es de 36,2 minutos; sin lluvia, de 23,1 (p &lt; 0,05). Así que sí: aunque pese poco frente a la hora o la temperatura, la lluvia se nota en el retraso.</p>
+                <div class="project-media-grid">
+                  <img src="/assets/tipologia-matriz-confusion.png" width="683" height="545" loading="lazy" alt="Matriz de confusión del Random Forest: la mayoría de vuelos de gravedad 0 se clasifican bien, y de las 40 cancelaciones acierta 23.">
+                  <img src="/assets/tipologia-retrasos-lluvia.png" width="788" height="650" loading="lazy" alt="Gráfico de violín de los minutos de retraso: los vuelos con lluvia tienen una mediana y una dispersión mayores que los vuelos sin lluvia.">
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <nav class="project-switcher" aria-label="Continuar navegando por proyectos">
+          <a href="/projects/master/tipologia-datos/practica-1/"><span>Anterior en tipologia-datos</span><strong>Tipología de datos · Práctica 1</strong><b aria-hidden="true">←</b></a>
+        </nav>
+      </article>
+    </main>
+
+    <footer class="site-footer" id="contacto">
+      <div class="shell footer-grid">
+        <div><p class="eyebrow">Contacto</p><h2>Si quieres contarme algo, escríbeme.</h2></div>
+        <ul class="contact-list" aria-label="Formas de contacto">
+          <li><a href="mailto:jorgesolanmorote@gmail.com">jorgesolanmorote@gmail.com</a></li>
+          <li><a href="https://github.com/J-solan">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/jorge-solan/">LinkedIn</a></li>
+        </ul>
+      </div>
+      <div class="shell footer-note"><span>Jorge Solán Morote</span><span>Portfolio personal · 2026</span></div>
+    </footer>
+  </body>
+</html>

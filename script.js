@@ -78,8 +78,10 @@
   for (const container of document.querySelectorAll("[data-project-list]")) {
     const mode = container.dataset.mode;
     const category = container.dataset.category;
+    const subject = container.dataset.subject;
     const visible = projects.filter((project) => {
       if (mode === "featured") return project.featured;
+      if (subject && project.subject !== subject) return false;
       if (category) return project.category === category;
       return true;
     });
@@ -105,7 +107,7 @@
   const categoryOrder = ["Carrera", "Máster", "Personal"];
   const categoryPaths = {
     Carrera: "carrera",
-    Máster: "master/deep-learning",
+    Máster: "master",
     Personal: "personal"
   };
 
@@ -133,9 +135,10 @@
 
   for (const container of document.querySelectorAll("[data-project-navigation]")) {
     const category = container.dataset.category;
+    const subject = container.dataset.subject;
     const current = container.dataset.currentProject;
     const links = projects
-      .filter((project) => project.category === category)
+      .filter((project) => project.category === category && (!subject || project.subject === subject))
       .map((project) => {
         const link = element("a", "project-browser-link");
         link.href = project.route;

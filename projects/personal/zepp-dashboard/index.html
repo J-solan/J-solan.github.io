@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Saca los datos de salud de una pulsera Amazfit de la nube de Zepp a una base SQLite propia, con una API y un panel web para verlos.">
+    <meta name="theme-color" content="#f3eee4">
+    <title>zepp-dashboard — Jorge Solán</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/data/projects.js" defer></script>
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header">
+      <nav class="site-nav shell" aria-label="Navegación principal">
+        <a class="signature" href="/" aria-label="Jorge Solán, inicio">Jorge Solán</a>
+        <div class="nav-links">
+          <a href="/proyectos/" data-nav-projects>Proyectos</a>
+          <a href="/#sobre-mi">Sobre mí</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <article class="project-page shell">
+        <nav class="breadcrumbs" aria-label="Ruta del proyecto">
+          <a href="/proyectos/">proyectos</a><span aria-hidden="true">/</span>
+          <a href="/proyectos/#personal">personal</a><span aria-hidden="true">/</span>
+          <span aria-current="page">zepp-dashboard</span>
+        </nav>
+
+        <header class="project-hero">
+          <div>
+            <div class="project-meta"><span>Personal</span><span>2026</span></div>
+            <h1>zepp-dashboard</h1>
+            <p class="project-deck">Saca los datos de salud de una pulsera Amazfit de la nube de Zepp a una base SQLite propia, con una API y un panel web para verlos de manera personalizada.</p>
+          </div>
+          <aside class="project-facts" aria-label="Datos del proyecto">
+            <p class="eyebrow">Ficha</p>
+            <dl>
+              <div><dt>Formato</dt><dd>Página de proyecto</dd></div>
+              <div><dt>Licencia</dt><dd>MIT</dd></div>
+              <div><dt>Tecnologías</dt><dd>Python · SQLite · FastAPI · React · TypeScript · Recharts</dd></div>
+            </dl>
+          </aside>
+        </header>
+
+        <div class="project-body-grid">
+          <aside class="project-navigation">
+            <nav class="page-index" aria-label="En esta página">
+              <p class="eyebrow">En esta página</p>
+              <ol>
+                <li><a href="#por-que">Por qué lo hice</a></li>
+                <li><a href="#capas">Cuatro capas</a></li>
+                <li><a href="#sesion">El problema de la sesión</a></li>
+                <li><a href="#panel">Qué se ve en el panel</a></li>
+                <li><a href="#probarlo">Probarlo</a></li>
+              </ol>
+            </nav>
+          </aside>
+
+          <div class="project-document">
+            <section class="resource-panel" aria-labelledby="recursos-proyecto">
+              <div class="resource-panel-head">
+                <div><p class="eyebrow">Recursos</p><h2 id="recursos-proyecto">Código y documentación</h2></div>
+                <span>1 entrada</span>
+              </div>
+              <div class="resource-file-list">
+                <a href="https://github.com/J-solan/zepp-dashboard">
+                  <span class="resource-type" aria-hidden="true">git</span>
+                  <span><strong>Repositorio en GitHub</strong><small>J-solan / zepp-dashboard · código, guías y modo demo</small></span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </section>
+
+            <div class="project-prose prose">
+              <section id="por-que">
+                <h2>Por qué lo hice</h2>
+                <p>Hago bastante deporte y me gusta poder jugar con los datos, al mirar diferentes modelos de pulseras vi que se podían sacar los datos de este tipo de pulseras y eso me daba muchas posibilidades.</p>
+                <p>Quería poder almacenar históricos, cotejarlos, compararlos, analizarlos y poder sincronizarlos con otras plataformas que la propia APP de Zepp no te deja de primeras. Zepp no tiene una API pública, así que tocó entender cómo habla su app con el servidor.</p>
+              </section>
+
+              <section id="capas">
+                <h2>Cuatro capas</h2>
+                <p>El proyecto está hecho por capas y cada una funciona sin la de encima: quien solo quiera un token o los datos en su propia base de datos puede quedarse con esa parte.</p>
+                <ol>
+                  <li><strong>Ingesta</strong> en Python: autenticación, cliente HTTP y parsers puros que no saben que existe una base de datos.</li>
+                  <li><strong>SQLite</strong> local con todo lo descargado.</li>
+                  <li><strong>API HTTP</strong> con FastAPI, que agrega y reduce las series para servirlas.</li>
+                  <li><strong>Web</strong> en React y Recharts, instalable en el móvil y usable sin conexión con los últimos datos vistos.</li>
+                </ol>
+              </section>
+
+              <section id="sesion">
+                <h2>El problema de la sesión</h2>
+                <p>Lo más curioso del proyecto fue un fallo que no aparece documentado en ningún sitio. Zepp solo permite una sesión por nombre de aplicación: si un script inicia sesión con el mismo nombre que la app del móvil, el servidor echa al móvil y deja de sincronizar.</p>
+                <p>La solución es iniciar sesión como la versión web, que tiene su propio hueco y convive con el móvil, pero pedir los datos con la cabecera de la app del móvil, porque si no, el historial de entrenamientos llega vacío. El resto de lo que fui descubriendo de la API está documentado en el repositorio.</p>
+              </section>
+
+              <section id="panel">
+                <h2>Qué se ve en el panel</h2>
+                <p>Frecuencia cardíaca por minuto, sueño por fases (incluidas las siestas, que la respuesta de Zepp esconde en un bloque aparte), estrés, BioCharge separado en mental y físico, readiness, HRV, pasos y carga de entrenamiento. Los entrenamientos de fuerza se cruzan con Hevy para ver series y pesos sobre el pulso, y hay un mapa corporal con el volumen semanal por músculo.</p>
+                <img src="/assets/zepp-dashboard-panel.png" width="1440" height="900" loading="lazy" alt="Panel de zepp-dashboard con datos inventados del modo demo: indicadores del último día a la izquierda y siete series de 30 días sobre un mismo eje temporal.">
+              </section>
+
+              <section id="probarlo">
+                <h2>Probarlo</h2>
+                <p>El repositorio tiene un modo demo con noventa días de datos inventados sobre el backend y la web reales, sin necesidad de cuenta de Zepp. Más adelante quiero traer esa demo a esta web; de momento se puede arrancar en local siguiendo el README.</p>
+                <p>Un aviso: usa una API no oficial y obtenida por ingeniería inversa. Puede cambiar o dejar de funcionar en cualquier momento, y solo debe usarse con tu propia cuenta y tus propios datos.</p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-footer" id="contacto">
+      <div class="shell footer-grid">
+        <div><p class="eyebrow">Contacto</p><h2>Si quieres contarme algo, escríbeme.</h2></div>
+        <ul class="contact-list" aria-label="Formas de contacto">
+          <li><a href="mailto:jorgesolanmorote@gmail.com">jorgesolanmorote@gmail.com</a></li>
+          <li><a href="https://github.com/J-solan">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/jorge-solan/">LinkedIn</a></li>
+        </ul>
+      </div>
+      <div class="shell footer-note"><span>Jorge Solán Morote</span><span>Portfolio personal · 2026</span></div>
+    </footer>
+  </body>
+</html>

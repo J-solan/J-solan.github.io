@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Web scraping de retrasos y cancelaciones de vuelos en los diez aeropuertos con más tráfico de España, cruzados con el clima de AEMET.">
+    <meta name="theme-color" content="#f3eee4">
+    <title>Tipología de datos · Práctica 1 — Jorge Solán</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/data/projects.js" defer></script>
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header">
+      <nav class="site-nav shell" aria-label="Navegación principal">
+        <a class="signature" href="/" aria-label="Jorge Solán, inicio">Jorge Solán</a>
+        <div class="nav-links">
+          <a href="/proyectos/" data-nav-projects>Proyectos</a>
+          <a href="/#sobre-mi">Sobre mí</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <article class="project-page shell">
+        <nav class="breadcrumbs" aria-label="Ruta del proyecto">
+          <a href="/proyectos/">proyectos</a><span aria-hidden="true">/</span>
+          <a href="/proyectos/#tipologia-datos">master / tipologia-datos</a><span aria-hidden="true">/</span>
+          <span aria-current="page">practica-1</span>
+        </nav>
+
+        <header class="project-hero">
+          <div>
+            <div class="project-meta"><span>Máster</span><span>2025</span></div>
+            <h1>Tipología de datos · Práctica 1</h1>
+            <p class="project-deck">Web scraping de retrasos y cancelaciones de vuelos en los diez aeropuertos con más tráfico de España, cruzados con el clima de AEMET y publicados como dataset en Zenodo.</p>
+          </div>
+          <aside class="project-facts" aria-label="Datos del proyecto">
+            <p class="eyebrow">Ficha</p>
+            <dl>
+              <div><dt>Formato</dt><dd>Página de proyecto</dd></div>
+              <div><dt>Asignatura</dt><dd>M2.851 Tipología y ciclo de vida de los datos</dd></div>
+              <div><dt>Autores</dt><dd>Jorge Solán Morote y Javier Solís Ron</dd></div>
+              <div><dt>Tecnologías</dt><dd>Python · Selenium · BeautifulSoup · Requests · pandas</dd></div>
+            </dl>
+          </aside>
+        </header>
+
+        <div class="project-body-grid">
+          <aside class="project-navigation">
+            <section class="project-browser" aria-labelledby="carpeta-tipologia">
+              <p class="eyebrow" id="carpeta-tipologia">Carpeta / tipologia-datos</p>
+              <nav data-project-navigation data-category="Máster" data-subject="tipologia-datos" data-current-project="tipologia-datos-practica-1" aria-label="Prácticas de Tipología de datos"></nav>
+            </section>
+            <nav class="page-index" aria-label="En esta página">
+              <p class="eyebrow">En esta página</p>
+              <ol>
+                <li><a href="#pregunta">La pregunta</a></li>
+                <li><a href="#vuelos">Los vuelos: Airadvisor</a></li>
+                <li><a href="#clima">El clima: AEMET</a></li>
+                <li><a href="#dataset">El dataset</a></li>
+              </ol>
+            </nav>
+          </aside>
+
+          <div class="project-document">
+            <section class="resource-panel" aria-labelledby="recursos-proyecto">
+              <div class="resource-panel-head">
+                <div><p class="eyebrow">Recursos</p><h2 id="recursos-proyecto">Código y datos</h2></div>
+                <span>2 entradas</span>
+              </div>
+              <div class="resource-file-list">
+                <a href="https://github.com/J-solan/web-scraping-airadvisor-aemet">
+                  <span class="resource-type" aria-hidden="true">git</span>
+                  <span><strong>Repositorio en GitHub</strong><small>J-solan / web-scraping-airadvisor-aemet</small></span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+                <a href="https://doi.org/10.5281/zenodo.17575816">
+                  <span class="resource-type" aria-hidden="true">doi</span>
+                  <span><strong>Dataset en Zenodo</strong><small>10.5281/zenodo.17575816</small></span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </section>
+
+            <div class="project-prose prose">
+              <section id="pregunta">
+                <h2>La pregunta</h2>
+                <p>Un retraso o una cancelación en un aeropuerto se arrastra al resto de rutas como un dominó. Queríamos ver si el clima en el aeropuerto de destino tiene algo que ver, centrándonos en los diez aeropuertos con más tráfico de España: Madrid, Barcelona, Mallorca, Málaga, Alicante, Gran Canaria, Tenerife, Ibiza, Lanzarote y Valencia.</p>
+                <p>La idea partió de un dataset de Kaggle con retrasos de vuelos en Estados Unidos y un resumen del clima de cada día. Aquí lo hicimos a menor escala, una semana de datos, pero con información meteorológica más detallada, repartida por franjas horarias.</p>
+                <img src="/assets/tipologia-p1-proceso.png" width="951" height="601" loading="lazy" alt="Esquema del proceso para cada ciudad: scraping de vuelos en Airadvisor con Selenium y BeautifulSoup, scraping del tiempo en AEMET con Requests y BeautifulSoup, y fusión de ambas tablas por día en un único dataset.">
+              </section>
+
+              <section id="vuelos">
+                <h2>Los vuelos: Airadvisor</h2>
+                <p>Los vuelos retrasados y cancelados salen de Airadvisor, una web dinámica en la que no basta con descargar el HTML: hay que escribir el aeropuerto, elegirlo en el desplegable, lanzar la búsqueda y recorrer las páginas de la tabla. Para eso usamos Selenium, que maneja el navegador como lo haría una persona, y BeautifulSoup para leer cada página de resultados antes de pasar a la siguiente.</p>
+                <p>Por el camino hubo que lidiar con el banner de cookies, los tiempos de carga y botones que no se pueden pulsar si no están a la vista. Añadimos esperas para no saturar la web y evitamos los enlaces a formularios de reclamación, que el <code>robots.txt</code> no permite rastrear.</p>
+              </section>
+
+              <section id="clima">
+                <h2>El clima: AEMET</h2>
+                <p>En AEMET la página es estática, así que bastó con Requests y BeautifulSoup. Lo difícil fue encontrar la estación: recorremos las comunidades autónomas y sus estaciones hasta dar con la que coincide con la ciudad y lleva «aeropuerto» en el nombre. De ahí sacamos temperaturas, rachas de viento y precipitación por franjas de seis horas.</p>
+                <p>AEMET solo publica los últimos días, por eso el dataset cubre la semana anterior y el día actual. Después unimos vuelos y clima por fecha con un <em>inner join</em> de pandas, de forma que cada vuelo queda con el tiempo que hizo ese día en su destino.</p>
+              </section>
+
+              <section id="dataset">
+                <h2>El dataset</h2>
+                <p>Cada fila es un vuelo retrasado o cancelado, con fecha, hora, aerolínea, origen y destino, y once variables meteorológicas. El script admite una ciudad o los diez aeropuertos de una vez, y puede ejecutarse sin abrir la ventana del navegador.</p>
+                <p>Lo publicamos en Zenodo con licencia CC BY-NC-SA 4.0. Los datos son públicos, pero no nos parecía bien permitir su uso comercial cuando proceden de la web de otra empresa que vive de ellos. La <a href="/projects/master/tipologia-datos/practica-2/">práctica 2</a> retoma este trabajo para limpiarlo y analizarlo.</p>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <nav class="project-switcher" aria-label="Continuar navegando por proyectos">
+          <a href="/projects/master/tipologia-datos/practica-2/"><span>Siguiente en tipologia-datos</span><strong>Tipología de datos · Práctica 2</strong><b aria-hidden="true">→</b></a>
+        </nav>
+      </article>
+    </main>
+
+    <footer class="site-footer" id="contacto">
+      <div class="shell footer-grid">
+        <div><p class="eyebrow">Contacto</p><h2>Si quieres contarme algo, escríbeme.</h2></div>
+        <ul class="contact-list" aria-label="Formas de contacto">
+          <li><a href="mailto:jorgesolanmorote@gmail.com">jorgesolanmorote@gmail.com</a></li>
+          <li><a href="https://github.com/J-solan">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/jorge-solan/">LinkedIn</a></li>
+        </ul>
+      </div>
+      <div class="shell footer-note"><span>Jorge Solán Morote</span><span>Portfolio personal · 2026</span></div>
+    </footer>
+  </body>
+</html>

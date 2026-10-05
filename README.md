@@ -12,7 +12,7 @@ Ahora estoy estudiando el máster de Data Science en la UOC. Mi TFM trata sobre 
 
 Quiero que el portfolio crezca conmigo y funcione como un pequeño baúl de trabajo. Aquí irán apareciendo proyectos del máster, experimentos personales y cosas que merezca la pena conservar o compartir.
 
-De momento contiene mi TFG sobre simulación de sensores SPAD, un renderizador hecho en Haskell y varios cuadernos de Deep Learning. Algunos proyectos tienen su propia página con contexto, código y documentación; otros se pueden consultar directamente como cuadernos HTML.
+De momento contiene mi TFG sobre simulación de sensores SPAD, un renderizador hecho en Haskell, cuadernos de Análisis estadístico, Deep Learning y Aprendizaje automático, las prácticas de Tipología y ciclo de vida de los datos y mi primer proyecto personal, zepp-dashboard. Algunos proyectos tienen su propia página con contexto, código y documentación; otros se pueden consultar directamente como cuadernos HTML.
 
 ## Contacto
 
