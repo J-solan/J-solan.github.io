@@ -1,0 +1,1051 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="annot"><span class="hs-comment">-- | Definici&#243;n de la escena a renderizar: par&#225;metros del render, c&#225;mara, figuras y luces.</span></span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Escena</span><span> </span><span class="hs-keyword">where</span><span>   </span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Elem3D.html"><span class="hs-identifier">Elem3D</span></a></span><span>
+</span><span id="line-5"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Elem3D.html#Foton"><span class="hs-identifier">Foton</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-6"></span><span>      </span><span class="annot"><a href="Elem3D.html#Luz"><span class="hs-identifier">Luz</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>      </span><span class="annot"><a href="Elem3D.html#RGB"><span class="hs-identifier">RGB</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>      </span><span class="annot"><a href="Elem3D.html#Base"><span class="hs-identifier">Base</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Elem3D.html#Base"><span class="hs-identifier">Base</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>      </span><span class="annot"><a href="Elem3D.html#Ray"><span class="hs-identifier">Ray</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>      </span><span class="annot"><a href="Elem3D.html#Direction"><span class="hs-identifier">Direction</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Elem3D.html#Direction"><span class="hs-identifier">Direction</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>      </span><span class="annot"><a href="Elem3D.html#Point3D"><span class="hs-identifier">Point3D</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>      </span><span class="annot"><a href="Elem3D.html#escalatePoint"><span class="hs-identifier">escalatePoint</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-13"></span><span>      </span><span class="annot"><a href="Elem3D.html#degToRad"><span class="hs-identifier">degToRad</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-14"></span><span>      </span><span class="annot"><a href="Elem3D.html#rotatePoint"><span class="hs-identifier">rotatePoint</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Elem3D.html#movePoint"><span class="hs-identifier">movePoint</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Elem3D.html#rotatePointt"><span class="hs-identifier">rotatePointt</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Elem3D.html#pointDir"><span class="hs-identifier">pointDir</span></a></span><span>
+</span><span id="line-15"></span><span>    </span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Figuras.html"><span class="hs-identifier">Figuras</span></a></span><span>
+</span><span id="line-18"></span><span>    </span><span class="hs-special">(</span><span> </span><span class="annot"><a href="Figuras.html#Obj"><span class="hs-identifier">Obj</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Figuras.html#Point2D"><span class="hs-identifier">Point2D</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Figuras.html#Img"><span class="hs-identifier">Img</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-19"></span><span>      </span><span class="annot"><a href="Figuras.html#Shape"><span class="hs-identifier">Shape</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Figuras.html#Sphere"><span class="hs-identifier">Sphere</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Figuras.html#Plane"><span class="hs-identifier">Plane</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Figuras.html#Cylinder"><span class="hs-identifier">Cylinder</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Figuras.html#Rectangle"><span class="hs-identifier">Rectangle</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Figuras.html#Cone"><span class="hs-identifier">Cone</span></a></span><span class="hs-special">,</span><span class="annot"><a href="Figuras.html#Triangle"><span class="hs-identifier">Triangle</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-20"></span><span>      </span><span class="annot"><a href="Figuras.html#Plano"><span class="hs-identifier">Plano</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Figuras.html#Plano"><span class="hs-identifier">Plano</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>      </span><span class="annot"><a href="Figuras.html#Esfera"><span class="hs-identifier">Esfera</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Figuras.html#Esfera"><span class="hs-identifier">Esfera</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>      </span><span class="annot"><a href="Figuras.html#Cilindro"><span class="hs-identifier">Cilindro</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Figuras.html#Cilindro"><span class="hs-identifier">Cilindro</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-23"></span><span>      </span><span class="annot"><a href="Figuras.html#Rectangulo"><span class="hs-identifier">Rectangulo</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Figuras.html#Rectangulo"><span class="hs-identifier">Rectangulo</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-24"></span><span>      </span><span class="annot"><a href="Figuras.html#Camara"><span class="hs-identifier">Camara</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Figuras.html#Camara"><span class="hs-identifier">Camara</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-25"></span><span>      </span><span class="annot"><a href="Figuras.html#Cono"><span class="hs-identifier">Cono</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Figuras.html#Cono"><span class="hs-identifier">Cono</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-26"></span><span>      </span><span class="annot"><a href="Figuras.html#Triangulo"><span class="hs-identifier">Triangulo</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Figuras.html#Triangulo"><span class="hs-identifier">Triangulo</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-27"></span><span>      </span><span class="annot"><a href="Figuras.html#addFigMult"><span class="hs-identifier">addFigMult</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-28"></span><span>      </span><span class="annot"><a href="Figuras.html#parametricShapeCollision"><span class="hs-identifier">parametricShapeCollision</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-29"></span><span>      </span><span class="annot"><a href="Figuras.html#loadObjFile"><span class="hs-identifier">loadObjFile</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-30"></span><span>      </span><span class="annot"><a href="Figuras.html#convertToCustomFormat"><span class="hs-identifier">convertToCustomFormat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Figuras.html#encenderShape"><span class="hs-identifier">encenderShape</span></a></span><span> </span><span class="hs-special">,</span><span class="annot"><a href="Figuras.html#encenderShapes"><span class="hs-identifier">encenderShapes</span></a></span><span>
+</span><span id="line-31"></span><span>      </span><span class="hs-special">)</span><span>
+</span><span id="line-32"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.DList</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">DL</span></span><span>
+</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Set</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Set</span></span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="hs-comment">-- CARGAKD</span><span>
+</span><span id="line-37"></span><span class="annot"><span class="hs-comment">-- | Intensidad de las luces de la escena.</span></span><span>
+</span><span id="line-38"></span><span class="annot"><a href="Escena.html#intMxKd"><span class="hs-identifier hs-type">intMxKd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-39"></span><span id="intMxKd"><span class="annot"><span class="annottext">intMxKd :: Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var hs-var">intMxKd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">50</span></span><span>
+</span><span id="line-40"></span><span class="annot"><span class="hs-comment">-- | N&#250;mero de fotones lanzados en photon mapping.</span></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Escena.html#n"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-42"></span><span id="n"><span class="annot"><span class="annottext">n :: Float
+</span><a href="Escena.html#n"><span class="hs-identifier hs-var hs-var">n</span></a></span></span><span class="hs-glyph">=</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">75000</span></span><span>
+</span><span id="line-43"></span><span class="annot"><span class="hs-comment">-- | N&#250;mero m&#225;ximo de rebotes de cada fot&#243;n.</span></span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Escena.html#nRebotes"><span class="hs-identifier hs-type">nRebotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-45"></span><span id="nRebotes"><span class="annot"><span class="annottext">nRebotes :: Int
+</span><a href="Escena.html#nRebotes"><span class="hs-identifier hs-var hs-var">nRebotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">6</span></span><span>
+</span><span id="line-46"></span><span class="hs-comment">-- SIMULACION</span><span>
+</span><span id="line-47"></span><span class="annot"><span class="hs-comment">-- | Relaci&#243;n de aspecto (ancho / alto) de la imagen final.</span></span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Escena.html#aspectR"><span class="hs-identifier hs-type">aspectR</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-49"></span><span id="aspectR"><span class="annot"><span class="annottext">aspectR :: Float
+</span><a href="Escena.html#aspectR"><span class="hs-identifier hs-var hs-var">aspectR</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span>
+</span><span id="line-50"></span><span class="annot"><span class="hs-comment">-- | Alto de la imagen en p&#237;xeles (el ancho es @pix * aspectR@). Debe coincidir con @pix@ en @tmp/run.sh@.</span></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Escena.html#pix"><span class="hs-identifier hs-type">pix</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-52"></span><span id="pix"><span class="annot"><span class="annottext">pix :: Float
+</span><a href="Escena.html#pix"><span class="hs-identifier hs-var hs-var">pix</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">300</span></span><span>
+</span><span id="line-53"></span><span class="annot"><span class="hs-comment">-- | Tama&#241;o de los vectores de la base de la c&#225;mara (determina el campo de visi&#243;n).</span></span><span>
+</span><span id="line-54"></span><span class="annot"><a href="Escena.html#piCam"><span class="hs-identifier hs-type">piCam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-55"></span><span id="piCam"><span class="annot"><span class="annottext">piCam :: Float
+</span><a href="Escena.html#piCam"><span class="hs-identifier hs-var hs-var">piCam</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">12.5</span></span><span>
+</span><span id="line-56"></span><span class="annot"><span class="hs-comment">-- | Valor gamma usado en el tone mapping.</span></span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Escena.html#gamma"><span class="hs-identifier hs-type">gamma</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-58"></span><span id="gamma"><span class="annot"><span class="annottext">gamma :: Float
+</span><a href="Escena.html#gamma"><span class="hs-identifier hs-var hs-var">gamma</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.4</span></span><span>
+</span><span id="line-59"></span><span class="annot"><span class="hs-comment">-- | N&#250;mero de procesos en los que se divide la imagen en vertical. Debe coincidir con @N@ en @tmp/run.sh@.</span></span><span>
+</span><span id="line-60"></span><span class="annot"><a href="Escena.html#maxN"><span class="hs-identifier hs-type">maxN</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-61"></span><span id="maxN"><span class="annot"><span class="annottext">maxN :: Int
+</span><a href="Escena.html#maxN"><span class="hs-identifier hs-var hs-var">maxN</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">12</span></span><span>
+</span><span id="line-62"></span><span class="annot"><span class="hs-comment">-- | N&#250;mero de etapas verticales del render particionado. Debe coincidir con @tmp/run.sh@.</span></span><span>
+</span><span id="line-63"></span><span class="annot"><a href="Escena.html#etapasY"><span class="hs-identifier hs-type">etapasY</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-64"></span><span id="etapasY"><span class="annot"><span class="annottext">etapasY :: Int
+</span><a href="Escena.html#etapasY"><span class="hs-identifier hs-var hs-var">etapasY</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span>
+</span><span id="line-65"></span><span class="annot"><span class="hs-comment">-- | N&#250;mero de etapas horizontales del render particionado. Debe coincidir con @tmp/run.sh@.</span></span><span>
+</span><span id="line-66"></span><span class="annot"><a href="Escena.html#etapasX"><span class="hs-identifier hs-type">etapasX</span></a></span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-67"></span><span id="etapasX"><span class="annot"><span class="annottext">etapasX :: Int
+</span><a href="Escena.html#etapasX"><span class="hs-identifier hs-var hs-var">etapasX</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">4</span></span><span>
+</span><span id="line-68"></span><span class="annot"><span class="hs-comment">-- | N&#250;mero de rayos lanzados por p&#237;xel (antialiasing).</span></span><span>
+</span><span id="line-69"></span><span class="annot"><a href="Escena.html#nRay"><span class="hs-identifier hs-type">nRay</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-70"></span><span id="nRay"><span class="annot"><span class="annottext">nRay :: Int
+</span><a href="Escena.html#nRay"><span class="hs-identifier hs-var hs-var">nRay</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span>
+</span><span id="line-71"></span><span class="annot"><span class="hs-comment">-- | Valor m&#225;ximo usado en la ecualizaci&#243;n del tone mapping.</span></span><span>
+</span><span id="line-72"></span><span class="annot"><a href="Escena.html#intMxSim"><span class="hs-identifier hs-type">intMxSim</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-73"></span><span id="intMxSim"><span class="annot"><span class="annottext">intMxSim :: Float
+</span><a href="Escena.html#intMxSim"><span class="hs-identifier hs-var hs-var">intMxSim</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1.0</span></span><span>
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span class="annot"><span class="hs-comment">-- | Base de la c&#225;mara: ancho, alto y direcci&#243;n de visi&#243;n.</span></span><span>
+</span><span id="line-76"></span><span class="annot"><a href="Escena.html#basCam"><span class="hs-identifier hs-type">basCam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Elem3D.html#Base"><span class="hs-identifier hs-type">Base</span></a></span><span>
+</span><span id="line-77"></span><span id="basCam"><span class="annot"><span class="annottext">basCam :: Base
+</span><a href="Escena.html#basCam"><span class="hs-identifier hs-var hs-var">basCam</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Direction -&gt; Direction -&gt; Direction -&gt; Base
+</span><a href="Elem3D.html#Base"><span class="hs-identifier hs-var">Base</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#piCam"><span class="hs-identifier hs-var">piCam</span></a></span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">*</span></span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#aspectR"><span class="hs-identifier hs-var">aspectR</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#piCam"><span class="hs-identifier hs-var">piCam</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">15</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="annot"><span class="hs-comment">-- | Posici&#243;n de la c&#225;mara.</span></span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Escena.html#cam"><span class="hs-identifier hs-type">cam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-type">Point3D</span></a></span><span>
+</span><span id="line-81"></span><span id="cam"><span class="annot"><span class="annottext">cam :: Point3D
+</span><a href="Escena.html#cam"><span class="hs-identifier hs-var hs-var">cam</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">20</span></span><span class="hs-special">)</span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="hs-comment">-- ESCENA</span><span>
+</span><span id="line-84"></span><span class="annot"><span class="hs-comment">-- | Punto auxiliar (no se usa en la escena actual).</span></span><span>
+</span><span id="line-85"></span><span class="annot"><a href="Escena.html#centr"><span class="hs-identifier hs-type">centr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-type">Point3D</span></a></span><span>
+</span><span id="line-86"></span><span id="centr"><span class="annot"><span class="annottext">centr :: Point3D
+</span><a href="Escena.html#centr"><span class="hs-identifier hs-var hs-var">centr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">9</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">8</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
+</span><span id="line-87"></span><span class="hs-comment">-- centr' :: Point3D</span><span>
+</span><span id="line-88"></span><span class="annot"><span class="hs-comment">-- | Punto auxiliar (no se usa en la escena actual).</span></span><span>
+</span><span id="line-89"></span><span id="centr%27"><span class="annot"><span class="annottext">centr' :: Point3D
+</span><a href="Escena.html#centr%27"><span class="hs-identifier hs-var hs-var">centr'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">8</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2</span></span><span class="hs-special">)</span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- centr'' :: Point3D</span><span>
+</span><span id="line-91"></span><span class="hs-comment">-- centr'' = Point3D 0 (-15) (-44)</span><span>
+</span><span id="line-92"></span><span class="hs-comment">-- centr''' :: Point3D</span><span>
+</span><span id="line-93"></span><span class="hs-comment">-- centr''' = Point3D 15 (-10) (-22)</span><span>
+</span><span id="line-94"></span><span>
+</span><span id="line-95"></span><span>
+</span><span id="line-96"></span><span class="annot"><span class="hs-comment">-- | Luces c&#225;lidas interiores de la fila izquierda.</span></span><span>
+</span><span id="line-97"></span><span id="luzI"><span class="annot"><span class="annottext">luzI :: Luz
+</span><a href="Escena.html#luzI"><span class="hs-identifier hs-var hs-var">luzI</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">4.7</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">220</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">175</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+forall a. Num a =&gt; a -&gt; a -&gt; a
+</span><span class="hs-operator hs-var">*</span></span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.9</span></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Dentro</span><span>
+</span><span id="line-98"></span><span class="annot"><span class="hs-comment">-- | Luces c&#225;lidas interiores de la fila izquierda.</span></span><span>
+</span><span id="line-99"></span><span id="luzI%27"><span class="annot"><span class="annottext">luzI' :: Luz
+</span><a href="Escena.html#luzI%27"><span class="hs-identifier hs-var hs-var">luzI'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">5</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">9</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">220</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">175</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span> </span><span class="hs-comment">-- Dentro</span><span>
+</span><span id="line-100"></span><span class="annot"><span class="hs-comment">-- | Luces c&#225;lidas interiores de la fila izquierda.</span></span><span>
+</span><span id="line-101"></span><span id="luzI%27%27"><span class="annot"><span class="annottext">luzI'' :: Luz
+</span><a href="Escena.html#luzI%27%27"><span class="hs-identifier hs-var hs-var">luzI''</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">5</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">18</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">220</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">175</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span> </span><span class="hs-comment">-- Dentro</span><span>
+</span><span id="line-102"></span><span class="annot"><span class="hs-comment">-- | Luz c&#225;lida interior junto a la entrada.</span></span><span>
+</span><span id="line-103"></span><span id="luzI%27%27%27"><span class="annot"><span class="annottext">luzI''' :: Luz
+</span><a href="Escena.html#luzI%27%27%27"><span class="hs-identifier hs-var hs-var">luzI'''</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">7</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.8</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">20</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">220</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">175</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span> </span><span class="hs-comment">-- Dentro</span><span>
+</span><span id="line-104"></span><span class="annot"><span class="hs-comment">-- | Luces c&#225;lidas interiores de la fila derecha.</span></span><span>
+</span><span id="line-105"></span><span id="luzD"><span class="annot"><span class="annottext">luzD :: Luz
+</span><a href="Escena.html#luzD"><span class="hs-identifier hs-var hs-var">luzD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">7</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">220</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">175</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span> </span><span class="hs-comment">-- Dentro</span><span>
+</span><span id="line-106"></span><span class="annot"><span class="hs-comment">-- | Luces c&#225;lidas interiores de la fila derecha.</span></span><span>
+</span><span id="line-107"></span><span id="luzD%27"><span class="annot"><span class="annottext">luzD' :: Luz
+</span><a href="Escena.html#luzD%27"><span class="hs-identifier hs-var hs-var">luzD'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">7</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">9</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">220</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">175</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span> </span><span class="hs-comment">-- Dentro</span><span>
+</span><span id="line-108"></span><span class="annot"><span class="hs-comment">-- | Luces c&#225;lidas interiores de la fila derecha.</span></span><span>
+</span><span id="line-109"></span><span id="luzD%27%27"><span class="annot"><span class="annottext">luzD'' :: Luz
+</span><a href="Escena.html#luzD%27%27"><span class="hs-identifier hs-var hs-var">luzD''</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">7</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">18</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">220</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">175</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span> </span><span class="hs-comment">-- Dentro</span><span>
+</span><span id="line-110"></span><span class="hs-comment">-- luz = Luz (Point3D (0) 0 (10)) (RGB 255 255 255) intMxKd -- Dentro</span><span>
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span class="annot"><span class="hs-comment">-- | Luces azuladas exteriores que entran por las ventanas.</span></span><span>
+</span><span id="line-113"></span><span id="luzE"><span class="annot"><span class="annottext">luzE :: Luz
+</span><a href="Escena.html#luzE"><span class="hs-identifier hs-var hs-var">luzE</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">17</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">3</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">7</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">125</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">125</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- LUZ 1&#186; VENTANA</span><span>
+</span><span id="line-114"></span><span class="annot"><span class="hs-comment">-- | Luces azuladas exteriores que entran por las ventanas.</span></span><span>
+</span><span id="line-115"></span><span id="luzE%27"><span class="annot"><span class="annottext">luzE' :: Luz
+</span><a href="Escena.html#luzE%27"><span class="hs-identifier hs-var hs-var">luzE'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">17</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">3</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">8.5</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">125</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">125</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- LUZ 1&#186; VENTANA</span><span>
+</span><span id="line-116"></span><span>
+</span><span id="line-117"></span><span>
+</span><span id="line-118"></span><span class="annot"><span class="hs-comment">-- | Luz auxiliar (no se usa en la escena actual).</span></span><span>
+</span><span id="line-119"></span><span class="annot"><a href="Escena.html#luz%27"><span class="hs-identifier hs-type">luz'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Elem3D.html#Luz"><span class="hs-identifier hs-type">Luz</span></a></span><span>
+</span><span id="line-120"></span><span id="luz%27"><span class="annot"><span class="annottext">luz' :: Luz
+</span><a href="Escena.html#luz%27"><span class="hs-identifier hs-var hs-var">luz'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">30</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">9</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">150</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">150</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- LUZ 1&#186; VENTANA</span><span>
+</span><span id="line-121"></span><span class="hs-comment">-- luz'' :: Luz</span><span>
+</span><span id="line-122"></span><span class="hs-comment">-- luz'' = Luz (Point3D (25) (5) (11)) (RGB 150 150 255) (intMxKd**1.5) -- LUZ 2&#186; VENTANA</span><span>
+</span><span id="line-123"></span><span class="hs-comment">-- luz''' :: Luz</span><span>
+</span><span id="line-124"></span><span class="hs-comment">-- luz''' = Luz (Point3D 0 0 (30))  (RGB 255 255 255) intMxKd -- Al lado de columna</span><span>
+</span><span id="line-125"></span><span class="hs-comment">-- luz'''' = Luz (Point3D (0) 2.5 (-15)) (RGB 255 255 255) intMxKd -- Dentro</span><span>
+</span><span id="line-126"></span><span class="annot"><span class="hs-comment">-- | Luz auxiliar (no se usa en la escena actual).</span></span><span>
+</span><span id="line-127"></span><span id="luz%27%27%27%27%27"><span class="annot"><span class="annottext">luz''''' :: Luz
+</span><a href="Escena.html#luz%27%27%27%27%27"><span class="hs-identifier hs-var hs-var">luz'''''</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">220</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">175</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span> </span><span>
+</span><span id="line-128"></span><span class="annot"><span class="hs-comment">-- | Luz auxiliar (no se usa en la escena actual).</span></span><span>
+</span><span id="line-129"></span><span id="luz%27%27%27%27%27%27"><span class="annot"><span class="annottext">luz'''''' :: Luz
+</span><a href="Escena.html#luz%27%27%27%27%27%27"><span class="hs-identifier hs-var hs-var">luz''''''</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; RGB -&gt; Float -&gt; Luz
+</span><a href="Elem3D.html#Luz"><span class="hs-identifier hs-var">Luz</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">6</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">19</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxKd"><span class="hs-identifier hs-var">intMxKd</span></a></span><span> </span><span class="hs-comment">-- Dentro</span><span>
+</span><span id="line-130"></span><span class="annot"><span class="hs-comment">-- | Rotaci&#243;n de 15&#186; sobre el eje Y que se aplica a los elementos para alinearlos con la malla cargada.</span></span><span>
+</span><span id="line-131"></span><span id="extraR"><span class="annot"><span class="annottext">extraR :: Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var hs-var">extraR</span></a></span></span><span class="hs-glyph">=</span><span class="annot"><span class="annottext">Char -&gt; Float -&gt; Point3D -&gt; Point3D
+</span><a href="Elem3D.html#rotatePointt"><span class="hs-identifier hs-var">rotatePointt</span></a></span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'Y'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">15</span></span><span class="hs-special">)</span><span>
+</span><span id="line-132"></span><span class="annot"><span class="hs-comment">-- | Esfera difusa blanca de radio 1 en el centro.</span></span><span>
+</span><span id="line-133"></span><span class="annot"><a href="Escena.html#bola"><span class="hs-identifier hs-type">bola</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Figuras.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-134"></span><span id="bola"><span class="annot"><span class="annottext">bola :: Shape
+</span><a href="Escena.html#bola"><span class="hs-identifier hs-var hs-var">bola</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Esfera -&gt; Shape
+</span><a href="Figuras.html#Sphere"><span class="hs-identifier hs-var">Sphere</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Esfera
+</span><a href="Figuras.html#Esfera"><span class="hs-identifier hs-var">Esfera</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.9</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- centro</span><span>
+</span><span id="line-135"></span><span class="annot"><span class="hs-comment">-- | Esfera difusa de radio 1 (posici&#243;n indicada en el comentario de la l&#237;nea).</span></span><span>
+</span><span id="line-136"></span><span id="bola%27"><span class="annot"><span class="annottext">bola' :: Shape
+</span><a href="Escena.html#bola%27"><span class="hs-identifier hs-var hs-var">bola'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Esfera -&gt; Shape
+</span><a href="Figuras.html#Sphere"><span class="hs-identifier hs-var">Sphere</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Esfera
+</span><a href="Figuras.html#Esfera"><span class="hs-identifier hs-var">Esfera</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">18</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.9</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- principio </span><span>
+</span><span id="line-137"></span><span class="annot"><span class="hs-comment">-- | Esfera difusa de radio 1 (posici&#243;n indicada en el comentario de la l&#237;nea).</span></span><span>
+</span><span id="line-138"></span><span id="bola%27%27"><span class="annot"><span class="annottext">bola'' :: Shape
+</span><a href="Escena.html#bola%27%27"><span class="hs-identifier hs-var hs-var">bola''</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Esfera -&gt; Shape
+</span><a href="Figuras.html#Sphere"><span class="hs-identifier hs-var">Sphere</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Esfera
+</span><a href="Figuras.html#Esfera"><span class="hs-identifier hs-var">Esfera</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">22</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.9</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- fondo</span><span>
+</span><span id="line-139"></span><span class="annot"><span class="hs-comment">-- | Esfera difusa de radio 1 (posici&#243;n indicada en el comentario de la l&#237;nea).</span></span><span>
+</span><span id="line-140"></span><span id="bola%27%27%27"><span class="annot"><span class="annottext">bola''' :: Shape
+</span><a href="Escena.html#bola%27%27%27"><span class="hs-identifier hs-var hs-var">bola'''</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Esfera -&gt; Shape
+</span><a href="Figuras.html#Sphere"><span class="hs-identifier hs-var">Sphere</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Esfera
+</span><a href="Figuras.html#Esfera"><span class="hs-identifier hs-var">Esfera</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">7.5</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.9</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- derecha</span><span>
+</span><span id="line-141"></span><span class="annot"><span class="hs-comment">-- | Esfera difusa de radio 1 (posici&#243;n indicada en el comentario de la l&#237;nea).</span></span><span>
+</span><span id="line-142"></span><span id="bola%27%27%27%27"><span class="annot"><span class="annottext">bola'''' :: Shape
+</span><a href="Escena.html#bola%27%27%27%27"><span class="hs-identifier hs-var hs-var">bola''''</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Esfera -&gt; Shape
+</span><a href="Figuras.html#Sphere"><span class="hs-identifier hs-var">Sphere</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Esfera
+</span><a href="Figuras.html#Esfera"><span class="hs-identifier hs-var">Esfera</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">15</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">2.5</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.9</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- izqd</span><span>
+</span><span id="line-143"></span><span>
+</span><span id="line-144"></span><span class="annot"><span class="hs-comment">-- | Esfera de radio 1 en la posici&#243;n de una luz exterior ('luzE').</span></span><span>
+</span><span id="line-145"></span><span id="bolav"><span class="annot"><span class="annottext">bolav :: Shape
+</span><a href="Escena.html#bolav"><span class="hs-identifier hs-var hs-var">bolav</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Esfera -&gt; Shape
+</span><a href="Figuras.html#Sphere"><span class="hs-identifier hs-var">Sphere</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Esfera
+</span><a href="Figuras.html#Esfera"><span class="hs-identifier hs-var">Esfera</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">18</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">3</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">7</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.9</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- izqd</span><span>
+</span><span id="line-146"></span><span class="annot"><span class="hs-comment">-- | Esfera de radio 1 en la posici&#243;n de una luz exterior ('luzE'').</span></span><span>
+</span><span id="line-147"></span><span id="bolav%27"><span class="annot"><span class="annottext">bolav' :: Shape
+</span><a href="Escena.html#bolav%27"><span class="hs-identifier hs-var hs-var">bolav'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Esfera -&gt; Shape
+</span><a href="Figuras.html#Sphere"><span class="hs-identifier hs-var">Sphere</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Esfera
+</span><a href="Figuras.html#Esfera"><span class="hs-identifier hs-var">Esfera</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">18</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">3</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">8.5</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.9</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- izqd</span><span>
+</span><span id="line-148"></span><span class="annot"><span class="hs-comment">-- | Esfera negra de radio 30 que envuelve la escena.</span></span><span>
+</span><span id="line-149"></span><span id="bolaO"><span class="annot"><span class="annottext">bolaO :: Shape
+</span><a href="Escena.html#bolaO"><span class="hs-identifier hs-var hs-var">bolaO</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Esfera -&gt; Shape
+</span><a href="Figuras.html#Sphere"><span class="hs-identifier hs-var">Sphere</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Esfera
+</span><a href="Figuras.html#Esfera"><span class="hs-identifier hs-var">Esfera</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">30</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.9</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span> </span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- centro</span><span>
+</span><span id="line-150"></span><span>
+</span><span id="line-151"></span><span class="hs-comment">-- rectcow = Rectangle (Rectangulo (extraR $ Point3D 0 5 (-2)) (pointDir.extraR $ Point3D (0) 0 (1)) (pointDir.extraR $ Point3D (-1) 0 (0)) 3.74 6.26 (RGB 100 100 100) (0.85,0,0) 0 0 Nada) -- Der</span><span>
+</span><span id="line-152"></span><span class="hs-comment">-- rectrom = Rectangle (Rectangulo (extraR $ Point3D 0 1 20) (pointDir.extraR $ Point3D (0) 0 (-1)) (pointDir.extraR $ Point3D (-1) 0 (0)) 5.05 8.95 (RGB 100 100 100) (0.85,0,0) 0 0 Nada) </span><span>
+</span><span id="line-153"></span><span>
+</span><span id="line-154"></span><span class="annot"><span class="hs-comment">-- | Rect&#225;ngulo vertical de 5.05 x 8.95 pensado para llevar una textura.</span></span><span>
+</span><span id="line-155"></span><span id="rectrom"><span class="annot"><span class="annottext">rectrom :: Shape
+</span><a href="Escena.html#rectrom"><span class="hs-identifier hs-var hs-var">rectrom</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Rectangulo -&gt; Shape
+</span><a href="Figuras.html#Rectangle"><span class="hs-identifier hs-var">Rectangle</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; Direction
+-&gt; Float
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Rectangulo
+</span><a href="Figuras.html#Rectangulo"><span class="hs-identifier hs-var">Rectangulo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">5</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Direction
+</span><a href="Elem3D.html#pointDir"><span class="hs-identifier hs-var">pointDir</span></a></span><span class="annot"><span class="annottext">(Point3D -&gt; Direction)
+-&gt; (Point3D -&gt; Point3D) -&gt; Point3D -&gt; Direction
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Direction) -&gt; Point3D -&gt; Direction
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Direction
+</span><a href="Elem3D.html#pointDir"><span class="hs-identifier hs-var">pointDir</span></a></span><span class="annot"><span class="annottext">(Point3D -&gt; Direction)
+-&gt; (Point3D -&gt; Point3D) -&gt; Point3D -&gt; Direction
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Direction) -&gt; Point3D -&gt; Direction
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">5.05</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">8.95</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-156"></span><span class="hs-comment">-- bolal =  Sphere (Esfera (extraR $ Point3D (5.75) 2.5 (0)) 1 (RGB 255 0 0) (0.9, 0,0) 1 0) -- centro</span><span>
+</span><span id="line-157"></span><span class="hs-comment">-- bolal' =  Sphere (Esfera (extraR $ Point3D (5.75) 2.5 (9)) 1 (RGB 0 255 0) (0.9, 0,0) 1 0) -- centro</span><span>
+</span><span id="line-158"></span><span class="hs-comment">-- bolal'' =  Sphere (Esfera (extraR $ Point3D (5.75) 2.5 (18)) 1 (RGB 0 0 255) (0.9, 0,0) 1 0) -- centro</span><span>
+</span><span id="line-159"></span><span class="annot"><span class="hs-comment">-- | Plano izquierdo.</span></span><span>
+</span><span id="line-160"></span><span class="annot"><a href="Escena.html#plano0"><span class="hs-identifier hs-type">plano0</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Figuras.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-161"></span><span id="plano0"><span class="annot"><span class="annottext">plano0 :: Shape
+</span><a href="Escena.html#plano0"><span class="hs-identifier hs-var hs-var">plano0</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Plano -&gt; Shape
+</span><a href="Figuras.html#Plane"><span class="hs-identifier hs-var">Plane</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Plano
+</span><a href="Figuras.html#Plano"><span class="hs-identifier hs-var">Plano</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">29</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">--Izq</span><span>
+</span><span id="line-162"></span><span class="annot"><span class="hs-comment">-- | Plano derecho.</span></span><span>
+</span><span id="line-163"></span><span class="annot"><a href="Escena.html#plano1"><span class="hs-identifier hs-type">plano1</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Figuras.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-164"></span><span id="plano1"><span class="annot"><span class="annottext">plano1 :: Shape
+</span><a href="Escena.html#plano1"><span class="hs-identifier hs-var hs-var">plano1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Plano -&gt; Shape
+</span><a href="Figuras.html#Plane"><span class="hs-identifier hs-var">Plane</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Plano
+</span><a href="Figuras.html#Plano"><span class="hs-identifier hs-var">Plano</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Point3D) -&gt; Point3D -&gt; Point3D
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">24</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D -&gt; Direction
+</span><a href="Elem3D.html#pointDir"><span class="hs-identifier hs-var">pointDir</span></a></span><span class="annot"><span class="annottext">(Point3D -&gt; Direction)
+-&gt; (Point3D -&gt; Point3D) -&gt; Point3D -&gt; Direction
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span class="annot"><span class="annottext">Point3D -&gt; Point3D
+</span><a href="Escena.html#extraR"><span class="hs-identifier hs-var">extraR</span></a></span><span> </span><span class="annot"><span class="annottext">(Point3D -&gt; Direction) -&gt; Point3D -&gt; Direction
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Der</span><span>
+</span><span id="line-165"></span><span class="annot"><span class="hs-comment">-- | Plano del techo.</span></span><span>
+</span><span id="line-166"></span><span class="annot"><a href="Escena.html#plano2"><span class="hs-identifier hs-type">plano2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Figuras.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-167"></span><span id="plano2"><span class="annot"><span class="annottext">plano2 :: Shape
+</span><a href="Escena.html#plano2"><span class="hs-identifier hs-var hs-var">plano2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Plano -&gt; Shape
+</span><a href="Figuras.html#Plane"><span class="hs-identifier hs-var">Plane</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Plano
+</span><a href="Figuras.html#Plano"><span class="hs-identifier hs-var">Plano</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">15</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Techo</span><span>
+</span><span id="line-168"></span><span class="annot"><span class="hs-comment">-- | Plano del fondo.</span></span><span>
+</span><span id="line-169"></span><span class="annot"><a href="Escena.html#plano3"><span class="hs-identifier hs-type">plano3</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Figuras.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-170"></span><span id="plano3"><span class="annot"><span class="annottext">plano3 :: Shape
+</span><a href="Escena.html#plano3"><span class="hs-identifier hs-var hs-var">plano3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Plano -&gt; Shape
+</span><a href="Figuras.html#Plane"><span class="hs-identifier hs-var">Plane</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Plano
+</span><a href="Figuras.html#Plano"><span class="hs-identifier hs-var">Plano</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">15</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Fondo</span><span>
+</span><span id="line-171"></span><span class="hs-comment">-- plano4 :: Shape</span><span>
+</span><span id="line-172"></span><span class="annot"><span class="hs-comment">-- | Plano del suelo.</span></span><span>
+</span><span id="line-173"></span><span id="plano4"><span class="annot"><span class="annottext">plano4 :: Shape
+</span><a href="Escena.html#plano4"><span class="hs-identifier hs-var hs-var">plano4</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Plano -&gt; Shape
+</span><a href="Figuras.html#Plane"><span class="hs-identifier hs-var">Plane</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Plano
+</span><a href="Figuras.html#Plano"><span class="hs-identifier hs-var">Plano</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">15</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1.6</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Suelo</span><span>
+</span><span id="line-174"></span><span class="annot"><span class="hs-comment">-- | Plano detr&#225;s de la c&#225;mara.</span></span><span>
+</span><span id="line-175"></span><span class="annot"><a href="Escena.html#plano5"><span class="hs-identifier hs-type">plano5</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Figuras.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-176"></span><span id="plano5"><span class="annot"><span class="annottext">plano5 :: Shape
+</span><a href="Escena.html#plano5"><span class="hs-identifier hs-var hs-var">plano5</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="annot"><span class="annottext">Plano -&gt; Shape
+</span><a href="Figuras.html#Plane"><span class="hs-identifier hs-var">Plane</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Plano
+</span><a href="Figuras.html#Plano"><span class="hs-identifier hs-var">Plano</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">50.5</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Detras Camara</span><span>
+</span><span id="line-177"></span><span>
+</span><span id="line-178"></span><span>
+</span><span id="line-179"></span><span class="hs-comment">-- rect0 :: Shape</span><span>
+</span><span id="line-180"></span><span class="hs-comment">--rect0 = Rectangle (Rectangulo (Point3D 15 0 (-10)) (Direction (1) 0 0) (Direction 0 0 (-1)) 30 30 (RGB 10 255 10) (0.85,0,0) 0 0 Nada) -- Der</span><span>
+</span><span id="line-181"></span><span class="hs-comment">-- rect1 :: Shape</span><span>
+</span><span id="line-182"></span><span class="annot"><span class="hs-comment">-- | Rect&#225;ngulo rojo a la izquierda.</span></span><span>
+</span><span id="line-183"></span><span id="rect1"><span class="annot"><span class="annottext">rect1 :: Shape
+</span><a href="Escena.html#rect1"><span class="hs-identifier hs-var hs-var">rect1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Rectangulo -&gt; Shape
+</span><a href="Figuras.html#Rectangle"><span class="hs-identifier hs-var">Rectangle</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; Direction
+-&gt; Float
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Rectangulo
+</span><a href="Figuras.html#Rectangulo"><span class="hs-identifier hs-var">Rectangulo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">15</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">30</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">30</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">255</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">10</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">10</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Izq</span><span>
+</span><span id="line-184"></span><span class="hs-comment">-- rect2 :: Shape</span><span>
+</span><span id="line-185"></span><span class="annot"><span class="hs-comment">-- | Rect&#225;ngulo gris del fondo.</span></span><span>
+</span><span id="line-186"></span><span id="rect2"><span class="annot"><span class="annottext">rect2 :: Shape
+</span><a href="Escena.html#rect2"><span class="hs-identifier hs-var hs-var">rect2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Rectangulo -&gt; Shape
+</span><a href="Figuras.html#Rectangle"><span class="hs-identifier hs-var">Rectangle</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; Direction
+-&gt; Float
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Rectangulo
+</span><a href="Figuras.html#Rectangulo"><span class="hs-identifier hs-var">Rectangulo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">15</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">30</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">30</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Fondo</span><span>
+</span><span id="line-187"></span><span class="hs-comment">-- rect3 :: Shape</span><span>
+</span><span id="line-188"></span><span class="annot"><span class="hs-comment">-- | Rect&#225;ngulo gris del techo.</span></span><span>
+</span><span id="line-189"></span><span id="rect3"><span class="annot"><span class="annottext">rect3 :: Shape
+</span><a href="Escena.html#rect3"><span class="hs-identifier hs-var hs-var">rect3</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Rectangulo -&gt; Shape
+</span><a href="Figuras.html#Rectangle"><span class="hs-identifier hs-var">Rectangle</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Point3D
+-&gt; Direction
+-&gt; Direction
+-&gt; Float
+-&gt; Float
+-&gt; RGB
+-&gt; (Float, Float, Float)
+-&gt; Float
+-&gt; Int
+-&gt; Img
+-&gt; Rectangulo
+</span><a href="Figuras.html#Rectangulo"><span class="hs-identifier hs-var">Rectangulo</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">15</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Direction
+</span><a href="Elem3D.html#Direction"><span class="hs-identifier hs-var">Direction</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">40</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">40</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; RGB
+</span><a href="Elem3D.html#RGB"><span class="hs-identifier hs-var">RGB</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">100</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="annot"><span class="annottext">Img
+</span><a href="Figuras.html#Nada"><span class="hs-identifier hs-var">Nada</span></a></span><span class="hs-special">)</span><span class="hs-comment">--Techo</span><span>
+</span><span id="line-190"></span><span class="hs-comment">-- Cilindro Point3D Direction Float RGB (Float, Float, Float) Float Int</span><span>
+</span><span id="line-191"></span><span class="hs-comment">-- cilindro :: Shape</span><span>
+</span><span id="line-192"></span><span class="hs-comment">-- cilindro = Cylinder (Cilindro centr (Direction 0 1 0) 5 (RGB 200 0 200) (0, 0.0, 0.0) 0 0 Nada)</span><span>
+</span><span id="line-193"></span><span class="hs-comment">-- cono = Cone(Cono (Point3D 0 0 (-8)) 1 1 (RGB 200 0 200) (0.85, 0.0, 0.0) 0 0 Nada)</span><span>
+</span><span id="line-194"></span><span class="hs-comment">-- tri = Triangle(Triangulo (Point3D (-2) 0 (-8)) (Point3D 0 4 (-8)) (Point3D (2) 0 (-8)) (Point2D 0 1) (Point2D 1 0) (Point2D 0 0) (RGB 200 0 200) (0.85, 0.0, 0.0) 0 0 Nada)</span><span>
+</span><span id="line-195"></span><span class="annot"><span class="hs-comment">-- | C&#225;mara principal de la escena.</span></span><span>
+</span><span id="line-196"></span><span class="annot"><a href="Escena.html#camara"><span class="hs-identifier hs-type">camara</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Figuras.html#Camara"><span class="hs-identifier hs-type">Camara</span></a></span><span>
+</span><span id="line-197"></span><span id="camara"><span class="annot"><span class="annottext">camara :: Camara
+</span><a href="Escena.html#camara"><span class="hs-identifier hs-var hs-var">camara</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; Base -&gt; Camara
+</span><a href="Figuras.html#Camara"><span class="hs-identifier hs-var">Camara</span></a></span><span> </span><span class="annot"><span class="annottext">Point3D
+</span><a href="Escena.html#cam"><span class="hs-identifier hs-var">cam</span></a></span><span> </span><span class="annot"><span class="annottext">Base
+</span><a href="Escena.html#basCam"><span class="hs-identifier hs-var">basCam</span></a></span><span>
+</span><span id="line-198"></span><span>
+</span><span id="line-199"></span><span class="annot"><span class="hs-comment">-- | C&#225;mara alternativa (no se usa en la escena actual).</span></span><span>
+</span><span id="line-200"></span><span class="annot"><a href="Escena.html#camara%27"><span class="hs-identifier hs-type">camara'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Figuras.html#Camara"><span class="hs-identifier hs-type">Camara</span></a></span><span>
+</span><span id="line-201"></span><span id="camara%27"><span class="annot"><span class="annottext">camara' :: Camara
+</span><a href="Escena.html#camara%27"><span class="hs-identifier hs-var hs-var">camara'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Point3D -&gt; Base -&gt; Camara
+</span><a href="Figuras.html#Camara"><span class="hs-identifier hs-var">Camara</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Point3D
+</span><a href="Elem3D.html#Point3D"><span class="hs-identifier hs-var">Point3D</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.5</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.5</span></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">20</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Base
+</span><a href="Escena.html#basCam"><span class="hs-identifier hs-var">basCam</span></a></span><span>
+</span><span id="line-202"></span><span>
+</span><span id="line-203"></span><span class="annot"><span class="hs-comment">-- | Alias de 'intMxSim' usado en el tone mapping final.</span></span><span>
+</span><span id="line-204"></span><span class="annot"><a href="Escena.html#fmx"><span class="hs-identifier hs-type">fmx</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-205"></span><span id="fmx"><span class="annot"><span class="annottext">fmx :: Float
+</span><a href="Escena.html#fmx"><span class="hs-identifier hs-var hs-var">fmx</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="Escena.html#intMxSim"><span class="hs-identifier hs-var">intMxSim</span></a></span><span>
+</span><span id="line-206"></span><span>
+</span><span id="line-207"></span><span>
+</span><span id="line-208"></span><span>
+</span><span id="line-209"></span><span>
+</span><span id="line-210"></span><span class="annot"><span class="hs-comment">-- | Figuras b&#225;sicas de la escena (las mallas .obj se a&#241;aden en @objs.hs@).</span></span><span>
+</span><span id="line-211"></span><span class="annot"><a href="Escena.html#figuras"><span class="hs-identifier hs-type">figuras</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Set.Set</span></span><span> </span><span class="annot"><a href="Figuras.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-212"></span><span id="figuras"><span class="annot"><span class="annottext">figuras :: Set Shape
+</span><a href="Escena.html#figuras"><span class="hs-identifier hs-var hs-var">figuras</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Shape] -&gt; Set Shape
+forall a. Ord a =&gt; [a] -&gt; Set a
+</span><span class="hs-identifier hs-var">Set.fromList</span></span><span> </span><span class="annot"><span class="annottext">([Shape] -&gt; Set Shape) -&gt; [Shape] -&gt; Set Shape
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Shape] -&gt; [Shape] -&gt; [Shape]
+</span><a href="Figuras.html#addFigMult"><span class="hs-identifier hs-var">addFigMult</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Shape
+</span><a href="Escena.html#plano1"><span class="hs-identifier hs-var">plano1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Shape
+</span><a href="Escena.html#bola"><span class="hs-identifier hs-var">bola</span></a></span><span class="hs-special">,</span><span> </span><span class="hs-comment">{- rectcow, -}</span><span> </span><span class="annot"><span class="annottext">Shape
+</span><a href="Escena.html#rectrom"><span class="hs-identifier hs-var">rectrom</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Shape
+</span><a href="Escena.html#bolaO"><span class="hs-identifier hs-var">bolaO</span></a></span><span> </span><span class="hs-comment">{- ,bola',bola'', bola''',bola'''' -}</span><span class="hs-comment">{- ,bolav,bolav' -}</span><span class="hs-comment">{- plano0,plano1,rect2,bola,plano2,bola',plano4,bola -}</span><span class="hs-comment">{- ,bolal,bolal',bolal'' -}</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-213"></span><span>
+</span><span id="line-214"></span><span class="hs-comment">-- a :: Shape</span><span>
+</span><span id="line-215"></span><span class="hs-comment">-- a =  Sphere (Esfera (Point3D 5 5 (-10)) 2 (RGB 200 200 200) (1, 0, 0) 1.7 0)</span><span>
+</span><span id="line-216"></span><span>
+</span><span id="line-217"></span><span class="hs-comment">-- b :: Shape</span><span>
+</span><span id="line-218"></span><span class="hs-comment">-- b =  Sphere (Esfera (Point3D 5 (-5) (-10)) 2 (RGB 200 200 200) (1, 0, 0) 1.7 0)</span><span>
+</span><span id="line-219"></span><span>
+</span><span id="line-220"></span><span class="hs-comment">-- c :: Shape</span><span>
+</span><span id="line-221"></span><span class="hs-comment">-- c =  Sphere (Esfera (Point3D (-5) (-5) (-10)) 2 (RGB 200 200 200) (1, 0, 0) 1.7 0)</span><span>
+</span><span id="line-222"></span><span>
+</span><span id="line-223"></span><span class="hs-comment">-- figuras :: Set.Set Shape</span><span>
+</span><span id="line-224"></span><span class="hs-comment">-- figuras = Set.fromList $ addFigMult [a, b, c, plano3] []</span><span>
+</span><span id="line-225"></span><span>
+</span><span id="line-226"></span><span class="annot"><span class="hs-comment">-- | Luces de la escena.</span></span><span>
+</span><span id="line-227"></span><span class="annot"><a href="Escena.html#luces"><span class="hs-identifier hs-type">luces</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Elem3D.html#Luz"><span class="hs-identifier hs-type">Luz</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-228"></span><span class="hs-comment">-- luces = [luz,luz'''',luz''''',luz'''''']</span><span>
+</span><span id="line-229"></span><span id="luces"><span class="annot"><span class="annottext">luces :: [Luz]
+</span><a href="Escena.html#luces"><span class="hs-identifier hs-var hs-var">luces</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Luz
+</span><a href="Escena.html#luzI"><span class="hs-identifier hs-var">luzI</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Luz
+</span><a href="Escena.html#luzI%27"><span class="hs-identifier hs-var">luzI'</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Luz
+</span><a href="Escena.html#luzI%27%27"><span class="hs-identifier hs-var">luzI''</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Luz
+</span><a href="Escena.html#luzD"><span class="hs-identifier hs-var">luzD</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Luz
+</span><a href="Escena.html#luzD%27"><span class="hs-identifier hs-var">luzD'</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Luz
+</span><a href="Escena.html#luzD%27%27"><span class="hs-identifier hs-var">luzD''</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Luz
+</span><a href="Escena.html#luzE"><span class="hs-identifier hs-var">luzE</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Luz
+</span><a href="Escena.html#luzE%27"><span class="hs-identifier hs-var">luzE'</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Luz
+</span><a href="Escena.html#luzI%27%27%27"><span class="hs-identifier hs-var">luzI'''</span></a></span><span class="hs-special">]</span></pre></body></html>
