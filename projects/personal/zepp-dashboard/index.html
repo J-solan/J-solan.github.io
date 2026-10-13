@@ -103,12 +103,22 @@
               <section id="panel">
                 <h2>Qué se ve en el panel</h2>
                 <p>Frecuencia cardíaca por minuto, sueño por fases (incluidas las siestas, que la respuesta de Zepp esconde en un bloque aparte), estrés, BioCharge separado en mental y físico, readiness, HRV, pasos y carga de entrenamiento. Los entrenamientos de fuerza se cruzan con Hevy para ver series y pesos sobre el pulso, y hay un mapa corporal con el volumen semanal por músculo.</p>
-                <img src="/assets/zepp-dashboard-panel.png" width="1440" height="900" loading="lazy" alt="Panel de zepp-dashboard con datos inventados del modo demo: indicadores del último día a la izquierda y siete series de 30 días sobre un mismo eje temporal.">
+                <img src="/assets/zepp-dashboard-panel.png" width="1440" height="1100" loading="lazy" alt="Panel de zepp-dashboard con datos inventados del modo demo: indicadores del último día a la izquierda y once series de 30 días sobre un mismo eje temporal.">
               </section>
 
               <section id="probarlo">
                 <h2>Probarlo</h2>
-                <p>El repositorio tiene un modo demo con noventa días de datos inventados sobre el backend y la web reales, sin necesidad de cuenta de Zepp. Más adelante quiero traer esa demo a esta web; de momento se puede arrancar en local siguiendo el README.</p>
+                <p>La demo de abajo es el proyecto real, el mismo backend en Python y la misma web, con noventa días de datos inventados. Corre entera en tu navegador, con Python compilado a WebAssembly: no hay servidor ni datos de nadie, y lo que cambies se pierde al recargar. Se actualiza sola con cada versión que publico en el repositorio.</p>
+                <figure class="demo-panel" data-demo>
+                  <div class="resource-panel-head">
+                    <div><p class="eyebrow">Demo en vivo</p><h3>Panel de zepp-dashboard</h3></div>
+                    <a href="/zepp-dashboard/" target="_blank" rel="noopener">Pantalla completa ↗</a>
+                  </div>
+                  <div class="demo-stage">
+                    <img src="/assets/zepp-dashboard-panel.png" width="1440" height="1100" loading="lazy" alt="">
+                    <button type="button" class="demo-start">Cargar la demo<small>unos 9 MB la primera vez · tarda unos segundos</small></button>
+                  </div>
+                </figure>
                 <p>Un aviso: usa una API no oficial y obtenida por ingeniería inversa. Puede cambiar o dejar de funcionar en cualquier momento, y solo debe usarse con tu propia cuenta y tus propios datos.</p>
               </section>
             </div>
@@ -128,5 +138,15 @@
       </div>
       <div class="shell footer-note"><span>Jorge Solán Morote</span><span>Portfolio personal · 2026</span></div>
     </footer>
+    <script>
+      // La demo descarga unos 9 MB (Python en WebAssembly): solo se carga si se pide.
+      document.querySelector("[data-demo] .demo-start")?.addEventListener("click", function () {
+        const frame = document.createElement("iframe");
+        frame.src = "/zepp-dashboard/";
+        frame.title = "Demo de zepp-dashboard con datos inventados";
+        this.closest(".demo-stage").replaceChildren(frame);
+        frame.focus();
+      });
+    </script>
   </body>
 </html>

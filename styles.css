@@ -521,3 +521,20 @@ h3 { font-size: clamp(1.25rem, 1.8vw, 1.55rem); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+/* Demo de zepp-dashboard: se carga al pulsar, en un iframe del mismo sitio. */
+.demo-panel { margin: 1.5rem 0 2rem; border: 1px solid var(--line); background: var(--paper-light); }
+.demo-panel .resource-panel-head h3 { margin: 0; font-size: 1.45rem; }
+.demo-panel .resource-panel-head a { color: var(--accent-dark); font-size: 0.85rem; white-space: nowrap; }
+.demo-stage { position: relative; height: min(80vh, 820px); background: var(--paper); }
+.demo-stage img { width: 100%; height: 100%; object-fit: cover; object-position: left top; opacity: 0.4; border: 0; background: none; }
+.demo-stage iframe { display: block; width: 100%; height: 100%; border: 0; }
+.demo-start {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  display: grid; gap: 0.3rem; padding: 0.95rem 1.5rem;
+  border: 1px solid var(--accent-dark); background: var(--accent); color: var(--paper-light);
+  font: 600 1rem/1.2 var(--sans); text-align: center; cursor: pointer;
+}
+.demo-start small { font-weight: 400; font-size: 0.76rem; opacity: 0.85; }
+.demo-start:hover { background: var(--accent-dark); }
+@media (max-width: 760px) { .demo-stage { height: 85vh; } }
