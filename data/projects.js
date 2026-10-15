@@ -7,8 +7,9 @@ window.PROJECTS = [
     year: 2024,
     format: "Página de proyecto",
     route: "/projects/unizar/tfg/",
-    featured: true,
+    featured: 2,
     order: 1,
+    image: "/assets/tfg-transient.jpg",
     technologies: ["Python", "Mitsuba 3", "Dr.Jit", "SPAD", "NLOS"]
   },
   {
@@ -19,8 +20,9 @@ window.PROJECTS = [
     year: 2024,
     format: "Página de proyecto",
     route: "/projects/unizar/haskell-rendering/",
-    featured: true,
+    featured: 3,
     order: 2,
+    image: "/assets/haskell-render.jpg",
     technologies: ["Haskell", "Path Tracing", "Photon Mapping", "BVH", "KD-tree"]
   },
   {
@@ -136,8 +138,9 @@ window.PROJECTS = [
     year: 2026,
     format: "Página de proyecto",
     route: "/projects/master/tipologia-datos/practica-2/",
-    featured: false,
+    featured: 4,
     order: 11,
+    image: "/assets/tipologia-retrasos-lluvia.png",
     technologies: ["Python", "pandas", "scikit-learn", "Random Forest", "K-means"]
   },
   {
@@ -200,8 +203,10 @@ window.PROJECTS = [
     year: 2026,
     format: "Página de proyecto",
     route: "/projects/personal/zepp-dashboard/",
-    featured: false,
+    featured: 1,
     order: 12,
+    image: "/assets/zepp-dashboard-panel.png",
+    demo: "/zepp-dashboard/",
     technologies: ["Python", "SQLite", "FastAPI", "React", "Recharts"]
   }
 ];

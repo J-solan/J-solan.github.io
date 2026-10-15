@@ -12,16 +12,26 @@
     return node;
   }
 
-  function createProjectRow(project) {
-    const article = element("article", "project-row");
-    const number = element("div", "project-number", String(project.order).padStart(2, "0"));
-    number.setAttribute("aria-hidden", "true");
+  function createProjectCard(project) {
+    const article = element("article", "project-card");
 
-    const main = element("div", "project-main");
+    if (project.image) {
+      const media = element("a", "project-card-media");
+      media.href = project.route;
+      media.tabIndex = -1;
+      media.setAttribute("aria-hidden", "true");
+      const image = element("img");
+      image.src = project.image;
+      image.alt = "";
+      image.loading = "lazy";
+      media.append(image);
+      article.append(media);
+    }
+
+    const body = element("div", "project-card-body");
     const meta = element("div", "project-meta");
     if (project.category) meta.append(element("span", "", project.category));
     if (project.year) meta.append(element("span", "", String(project.year)));
-    if (project.format) meta.append(element("span", "", project.format));
 
     const title = element("h3");
     const titleLink = element("a", "", project.title);
@@ -35,6 +45,7 @@
       technologies.append(element("li", "", technology));
     }
 
+    const links = element("div", "project-card-links");
     const callToAction = element(
       "a",
       "project-cta",
@@ -44,9 +55,21 @@
     const arrow = element("span", "", "→");
     arrow.setAttribute("aria-hidden", "true");
     callToAction.append(" ", arrow);
+    links.append(callToAction);
 
-    main.append(meta, title, summary, technologies, callToAction);
-    article.append(number, main);
+    if (project.demo) {
+      const demoLink = element("a", "project-cta", "Demo en vivo");
+      demoLink.href = project.demo;
+      demoLink.target = "_blank";
+      demoLink.rel = "noopener";
+      const demoArrow = element("span", "", "↗");
+      demoArrow.setAttribute("aria-hidden", "true");
+      demoLink.append(" ", demoArrow);
+      links.append(demoLink);
+    }
+
+    body.append(meta, title, summary, technologies, links);
+    article.append(body);
     return article;
   }
 
@@ -80,21 +103,17 @@
     const category = container.dataset.category;
     const subject = container.dataset.subject;
     const visible = projects.filter((project) => {
-      if (mode === "featured") return project.featured;
+      if (mode === "featured") return Boolean(project.featured);
       if (subject && project.subject !== subject) return false;
       if (category) return project.category === category;
       return true;
     });
+    if (mode === "featured") visible.sort((a, b) => a.featured - b.featured);
 
     const renderer = container.dataset.view === "repository"
       ? createRepositoryRow
-      : createProjectRow;
+      : createProjectCard;
     container.replaceChildren(...visible.map(renderer));
-
-    const panelCount = container.closest(".repository-panel")?.querySelector("[data-list-count]");
-    if (panelCount) {
-      panelCount.textContent = `${visible.length} ${visible.length === 1 ? "entrada" : "entradas"}`;
-    }
 
     const group = container.closest("[data-project-group]");
     if (group) {
@@ -119,7 +138,7 @@
 
       const item = element("li");
       const link = element("a");
-      link.href = `#${categoryPaths[category].split("/")[0]}`;
+      link.href = `/proyectos/#${categoryPaths[category]}`;
       const folder = element("span", "tree-folder");
       folder.setAttribute("aria-hidden", "true");
       link.append(
@@ -132,6 +151,8 @@
     }
     container.replaceChildren(list);
   }
+
+  for (const node of document.querySelectorAll("[data-total-count]")) node.textContent = projects.length;
 
   for (const container of document.querySelectorAll("[data-project-navigation]")) {
     const category = container.dataset.category;
